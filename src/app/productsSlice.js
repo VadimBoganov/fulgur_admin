@@ -12,14 +12,58 @@ export const fetchProducts = createAsyncThunk('fetchProducts', async (_, thunkAp
     }     
 })
 
+export const addProduct = createAsyncThunk('addProduct', async(data, thunkApi) => {
+    try{ 
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const resp = await axios.post(config.productsUrl, data, headers);
+        return resp.data;
+    }catch(err){
+        console.log(err);
+        return thunkApi.rejectWithValue(err);
+    }     
+})
+
+export const updateProduct = createAsyncThunk('updateProduct', async(data, thunkApi) => {
+    try{ 
+        const resp = await axios.put(`${config.productsUrl}/${data.id}`, data);
+        return resp.data;
+    }catch(err){
+        console.log(err);
+        return thunkApi.rejectWithValue(err);
+    }  
+})
+
+export const removeProduct = createAsyncThunk('removeProduct', async(id, thunkApi) => {
+    try{
+        const resp = await axios.delete(`${config.productsUrl}/${id}`);
+        return resp.data
+    }
+    catch(err){
+        console.log(err);
+        return thunkApi.rejectWithValue(err);
+    }
+})
+
 const productsSlice = createSlice({
     name: 'products',
     initialState: {
        list: [],
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchProducts.fulfilled, (state, action) => {
-            state.list = action.payload; 
+        builder.addCase(fetchProducts.fulfilled, (state, {payload}) => {
+            state.list = payload; 
+        })
+        builder.addCase(removeProduct.fulfilled, (state, {payload}) => {
+            state.list = state.list.filter((item) => item.id !== payload)
+        })
+        builder.addCase(addProduct.fulfilled, (state, {payload}) => {
+            state.list.push(payload)
+        })
+        builder.addCase(updateProduct.fulfilled, (state, {payload}) => {
+            const ind = state.list.findIndex(o => o.id === payload.Id)
+            state.list[ind] = payload.Name
         })
     }
 })

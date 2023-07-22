@@ -1,7 +1,8 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../app/productsSlice";
+import { addProduct, fetchProducts } from "../../app/productsSlice";
 import styles from "./Admin.module.scss";
+import ProductForm from "./ProductForm";
 
 const Product = () => {
   const dispatch = useDispatch();
@@ -12,39 +13,37 @@ const Product = () => {
 
   const { list } = useSelector(({ products }) => products);
 
-  const [val, setVal] = useState({});
+  const [addVal, setAddVal] = useState("");
 
-  const onClick = () => {
-    alert(val);
-  };
-
-  const onChange = (e) => {
-    setVal(e.target.value);
-  };
+  const inputRef = useRef(null);
 
   return (
-    <>
+    <div className={styles.container}>
       {list.map(({ Id, Name }) => (
-        <div key={Id} className={styles.container}>
-          <div className={styles.form}>
-            <form key={Id}>
-              <label htmlFor={Id}> {Name}:</label>
-              <input
-                id={Id}
-                type="text"
-                placeholder="type..."
-                autoComplete="off"
-                value={val[Id]}
-                onChange={onChange}
-              />
-              <button key={Id} className={styles.button} onClick={onClick}>
-                Update
-              </button>
-            </form>
-          </div>
-        </div>
+        <ProductForm key={Id} id={Id} name={Name} />
       ))}
-    </>
+      <div className={styles.add_form}>
+        <form>
+          <label>Add:</label>
+          <input
+            type="text"
+            ref={inputRef}
+            placeholder="type..."
+            autoComplete="off"
+            value={addVal}
+            onChange={(e) => setAddVal(e.target.value)}
+          />
+          <button
+            className={styles.button}
+            onClick={() => {
+              dispatch(addProduct([{ Name: inputRef.current.value }]));
+            }}
+          >
+            Add
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 

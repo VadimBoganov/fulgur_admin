@@ -1,7 +1,13 @@
+.admin{
+    display: flex;
+    margin: 30px 10px;
+}
+
 .container{
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-left: inherit;
+    width: 100%;
 }
 
 .form{
@@ -12,7 +18,12 @@
     padding: 7px 10px;
     column-gap: 16px;
     position: relative;
-    margin: 10px 0;
+    margin-bottom: 10px;
+}
+
+.add_form{
+    @extend .form;
+    background: #1a1c38;
 }
 
 .form form {
@@ -35,4 +46,11 @@ input[type=text]{
     -webkit-transition: 0.5s;
     transition: 0.5s;
     outline: none;
+}
+
+.removeBtn{
+    background: #b53030;
+    &:hover{
+        background: #9f5151;
+    }
 }
