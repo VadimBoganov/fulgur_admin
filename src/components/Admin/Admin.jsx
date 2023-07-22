@@ -1,8 +1,9 @@
-import React from 'react'
+
+import Product from './Product'
 
 const Admin = () => {
   return (
-    <div>Admin</div>
+    <Product/>
   )
 }
 

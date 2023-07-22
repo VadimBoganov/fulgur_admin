@@ -1,6 +1,5 @@
 import { AppRoutes } from "../Routes/Routes";
 
-
 function App() {
   return (
     <div className="app">
