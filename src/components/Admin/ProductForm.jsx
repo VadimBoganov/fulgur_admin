@@ -10,28 +10,34 @@ const ProductForm = (props) => {
   return (
     <div className={styles.form}>
       <form>
-        <label>{props.name}:</label>
+        <label htmlFor={props.id}>{props.name}:</label>
         <input
+          id={props.id}
           type="text"
           placeholder="type..."
           autoComplete="off"
-          value={val.id}
+          value={val}
           onChange={(e) => setVal(e.target.value)}
         />
         <button
           className={styles.removeBtn}
-          onClick={() => dispatch(removeProduct(props.id))}
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(removeProduct(props.id));            
+          }}
         >
           Remove
         </button>
         <button
           className={styles.button}
           onClick={(e) => {
+            e.preventDefault()
             const data = {
               id: props.id,
               name: val,
             };
             dispatch(updateProduct(data));
+            setVal('')
           }}
         >
           Update

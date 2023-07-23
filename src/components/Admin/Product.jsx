@@ -1,31 +1,26 @@
-import { React, useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addProduct, fetchProducts } from "../../app/productsSlice";
+import { React, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../../app/productsSlice";
 import styles from "./Admin.module.scss";
 import ProductForm from "./ProductForm";
 
-const Product = () => {
+const Product = (props) => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
-
-  const { list } = useSelector(({ products }) => products);
-
+  
   const [addVal, setAddVal] = useState("");
 
   const inputRef = useRef(null);
-
   return (
+    
     <div className={styles.container}>
-      {list.map(({ Id, Name }) => (
+      {props.prods && props.prods.map(({ Id, Name }) => (
         <ProductForm key={Id} id={Id} name={Name} />
       ))}
       <div className={styles.add_form}>
         <form>
-          <label>Add:</label>
+          <label htmlFor="add">Add:</label>
           <input
+            id="add"
             type="text"
             ref={inputRef}
             placeholder="type..."
@@ -35,8 +30,10 @@ const Product = () => {
           />
           <button
             className={styles.button}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               dispatch(addProduct([{ Name: inputRef.current.value }]));
+              setAddVal('')
             }}
           >
             Add

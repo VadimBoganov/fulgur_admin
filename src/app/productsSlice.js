@@ -56,14 +56,14 @@ const productsSlice = createSlice({
             state.list = payload; 
         })
         builder.addCase(removeProduct.fulfilled, (state, {payload}) => {
-            state.list = state.list.filter((item) => item.id !== payload)
+            state.list = state.list.filter((item) => item.Id !== payload)
         })
         builder.addCase(addProduct.fulfilled, (state, {payload}) => {
-            state.list.push(payload)
+            state.list.push(payload[0])
         })
         builder.addCase(updateProduct.fulfilled, (state, {payload}) => {
-            const ind = state.list.findIndex(o => o.id === payload.Id)
-            state.list[ind] = payload.Name
+            const ind = state.list.findIndex(o => o.Id === payload.Id)
+            state.list[ind].Name = payload.Name
         })
     }
 })
