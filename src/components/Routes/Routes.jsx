@@ -4,8 +4,9 @@ import { ROUTES } from '../../utils/routes'
 
 import Home from '../Home/Home'
 import Admin from '../Admin/Admin'
-import AdminProducts from '../Admin/AdminProducts'
-import { AdminRouteTypes } from '../Admin/AdminRouteTypes'
+import AdminProducts from '../Admin/Products/AdminProducts'
+import { AdminRouteTypes } from '../Admin/ProductType/AdminRouteTypes'
+import AdminItem from '../Admin/Item/AdminItem'
 
 
 export const AppRoutes = () => {
@@ -15,6 +16,9 @@ export const AppRoutes = () => {
         <Route path={ROUTES.ADMIN} element={<Admin/>}/>
         <Route path={ROUTES.PRODUCT} element={<AdminProducts/>}/>
         <Route path={ROUTES.PRODUCTTYPE} element={<AdminRouteTypes/>} />
+        <Route path={ROUTES.PRODUCTSUBTYPE} element={<AdminRouteTypes/>} />
+        <Route path={ROUTES.PRODUCTITEM} element={<AdminRouteTypes/>} />
+        <Route path={ROUTES.ITEM} element={<AdminItem/>}/>
     </Routes>
   )
 }

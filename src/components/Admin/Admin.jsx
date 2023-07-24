@@ -1,4 +1,4 @@
-import Product from "./Product";
+import Product from "../Admin/Products/Product";
 import Sidebar from "./Sidebar";
 import styles from './Admin.module.scss'
 import { fetchProducts } from "../../app/productsSlice";

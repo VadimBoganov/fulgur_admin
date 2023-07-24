@@ -2,6 +2,9 @@ export const ROUTES = {
     HOME: '/',
     CART: '/cart',
     ADMIN:'/admin',
-    PRODUCT:'/admin/1',
-    PRODUCTTYPE:'/admin/2'
+    PRODUCT:'/admin/product',
+    PRODUCTTYPE:'/admin/producttype',
+    PRODUCTSUBTYPE:'/admin/productsubtype',
+    PRODUCTITEM:'/admin/productitem',
+    ITEM:'/admin/item',
 }
