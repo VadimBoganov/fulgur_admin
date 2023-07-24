@@ -9,8 +9,19 @@ const Sidebar = () => {
       <nav>
         <ul className={styles.menu}>
           <li>
-            <NavLink>
-              LINK
+            <NavLink className={({ isActive }) =>
+                  `${styles.link} ${isActive ? styles.active : ""}`
+                }
+                to={`/admin/1`}>
+              Products
+            </NavLink>
+          </li>
+          <li>
+            <NavLink className={({ isActive }) =>
+                  `${styles.link} ${isActive ? styles.active : ""}`
+                }
+                to={`/admin/2`}>
+              Product Types
             </NavLink>
           </li>
         </ul>

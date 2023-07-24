@@ -10,8 +10,7 @@ const Product = (props) => {
   const [addVal, setAddVal] = useState("");
 
   const inputRef = useRef(null);
-  return (
-    
+  return (    
     <div className={styles.container}>
       {props.prods && props.prods.map(({ Id, Name }) => (
         <ProductForm key={Id} id={Id} name={Name} />
