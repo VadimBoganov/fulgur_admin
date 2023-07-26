@@ -4,7 +4,7 @@ import config from "../config/config.json"
 
 export const fetchProducts = createAsyncThunk('fetchProducts', async (_, thunkApi) => {
     try{
-        const resp = await axios(config.productsUrl);
+        const resp = await axios.get(config.productsUrl)
         return resp.data;
     }catch(err){
         console.log(err);
@@ -14,10 +14,7 @@ export const fetchProducts = createAsyncThunk('fetchProducts', async (_, thunkAp
 
 export const addProduct = createAsyncThunk('addProduct', async(data, thunkApi) => {
     try{ 
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-        const resp = await axios.post(config.productsUrl, data, headers);
+        const resp = await axios.post(config.productsUrl, data);
         return resp.data;
     }catch(err){
         console.log(err);

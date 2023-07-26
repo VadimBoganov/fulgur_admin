@@ -34,7 +34,7 @@ const Product = () => {
               <input
                 id={Id}
                 type="text"
-                placeholder="Написать..."
+                placeholder={Name}
                 autoComplete="off"
                 onChange={(e) => setValue(e.target.value)}
               />
