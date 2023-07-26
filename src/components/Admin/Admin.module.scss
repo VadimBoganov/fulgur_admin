@@ -61,10 +61,20 @@ option{
     background: var(--dark);
 }
 
-.removeBtn {
+.remove_button {
+  @extend button;
   background: #b53030;
   &:hover {
     background: #9f5151;
+  }
+}
+
+.add_button{
+  @extend button;
+  margin: 0px 0px 10px 0px;
+  background: green;
+  &:hover{
+    background: rgb(14, 145, 14);
   }
 }
 
@@ -83,7 +93,7 @@ img {
 input::file-selector-button {
   @extend button;
   width: 30%;
-  margin-top: 0px;
+  margin: 0px 10px 0px 0px;
 }
 
 input[type=file] {

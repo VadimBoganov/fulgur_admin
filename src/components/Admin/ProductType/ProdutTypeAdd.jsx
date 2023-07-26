@@ -1,25 +1,17 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styles from "../Admin.module.scss";
 import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
 
-const ProductType = () => {
+const ProdutTypeForm = () => {
   const { list } = useSelector(({ products }) => products);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('')
 
   return (
     <div className={styles.admin}>
       <Sidebar />
       <div className={styles.container}>
-        <NavLink
-          className={({ isActive }) =>
-            `${styles.link} ${isActive ? styles.active : ""}`
-          }
-          to={`/admin/producttype/add`}
-        >
-          <button className={styles.add_button}>Добавить</button>
-        </NavLink>
         <form className={styles.form}>
           <label htmlFor="addProductType">Название продукции:</label>
           <select id="addProductType" name="product types">
@@ -35,35 +27,30 @@ const ProductType = () => {
             id="productTypeName"
             type="text"
             placeholder="Написать..."
-            value={value}
             autoComplete="off"
+            value={value}
             onChange={(e) => setValue(e.target.value)}
           />
-          <section>
+          <NavLink
+            className={({ isActive }) =>
+              `${styles.link} ${isActive ? styles.active : ""}`
+            }
+            to={`/admin/producttype`}
+          >
             <button
               className={styles.button}
-              onClick={(e) => {
-                e.preventDefault();
-                //dispatch(updateProduct({ id: Id, name: value }));
+              onClick={() => {
+                //dispatch(addProduct([{ Name: value }]));
                 setValue("");
               }}
             >
-              Обновить
+              Добавить
             </button>
-            <button
-              className={styles.remove_button}
-              onClick={(e) => {
-                e.preventDefault();
-                //dispatch(removeProduct(Id));
-              }}
-            >
-              Удалить
-            </button>
-          </section>
+          </NavLink>
         </form>
       </div>
     </div>
   );
 };
 
-export default ProductType;
+export default ProdutTypeForm;

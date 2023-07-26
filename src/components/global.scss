@@ -92,7 +92,8 @@ button {
   line-height: 20px;
   cursor: pointer;
   margin-top: 7px;
-  width: 16%;
+  min-width: 100px;
+  margin: 7px 0px 0px 10px;
 }
 
 button:hover {

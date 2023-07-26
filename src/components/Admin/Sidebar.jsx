@@ -64,7 +64,7 @@ const Sidebar = () => {
         <a className={styles.link} href="/">
           Помощь
         </a>
-        <a className={styles.link} style={{textDecoration: "underline"}} href="/">
+        <a className={styles.link} style={{textDecoration: 'underline'}} href="/">
           Условия и положения
         </a>
       </div>
