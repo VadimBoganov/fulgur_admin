@@ -32,7 +32,7 @@ export const updateProductType = createAsyncThunk('updateProductType', async(dat
     }  
 })
 
-export const removeProductType = createAsyncThunk('removeProduct', async(id, thunkApi) => {
+export const removeProductType = createAsyncThunk('removeProductType', async(id, thunkApi) => {
     try{
         const resp = await axios.delete(`${config.productTypesUrl}/${id}`);
         return resp.data
@@ -54,6 +54,7 @@ const productTypesSlice = createSlice({
         })
        
         builder.addCase(addProductType.fulfilled, (state, {payload}) => {
+            state.list = state.list || []
             state.list.push(payload)
         })
         builder.addCase(updateProductType.fulfilled, (state, {payload}) => {

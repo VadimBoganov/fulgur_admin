@@ -7,6 +7,8 @@ export const ROUTES = {
     PRODUCTTYPE:'/admin/producttype',
     PRODUCTTYPEADD:'/admin/producttype/add',
     PRODUCTSUBTYPE:'/admin/productsubtype',
+    PRODUCTSUBTYPEADD:'/admin/productsubtype/add',
     PRODUCTITEM:'/admin/productitem',
+    PRODUCTITEMADD:'/admin/productitem/add',
     ITEM:'/admin/item',
 }
