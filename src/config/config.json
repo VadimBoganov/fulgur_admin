@@ -1,5 +1,7 @@
 {
     "productsUrl": "http://localhost:8000/api/products",
     "productTypesUrl": "http://localhost:8000/api/producttypes",
-    "productSubtypesUrl": "http://localhost:8000/api/productsubtypes"
+    "productSubtypesUrl": "http://localhost:8000/api/productsubtypes",
+    "productItemsUrl":"http://localhost:8000/api/productitems",
+    "itemsUrl": "http://localhost:8000/api/items"
 }

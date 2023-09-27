@@ -5,7 +5,6 @@ import { ROUTES } from '../../utils/routes'
 import Home from '../Home/Home'
 import Admin from '../Admin/Admin'
 import ProdutTypeAdd  from '../Admin/ProductType/ProdutTypeAdd'
-import AdminItem from '../Admin/Item/AdminItem'
 import ProductAdd from '../Admin/Products/ProductAdd'
 import Product from '../Admin/Products/Product'
 import ProductType from '../Admin/ProductType/ProductType'
@@ -13,6 +12,8 @@ import ProductSubtype from '../Admin/ProductSubType/ProductSubtype'
 import ProductSubtypeAdd from '../Admin/ProductSubType/ProductSubtypeAdd'
 import ProductItem from '../Admin/ProductItem/ProductItem'
 import ProductItemAdd from '../Admin/ProductItem/ProductItemAdd'
+import Item from '../Admin/Item/Item'
+import ItemAdd from '../Admin/Item/ItemAdd'
  
 
 export const AppRoutes = () => {
@@ -28,7 +29,8 @@ export const AppRoutes = () => {
         <Route path={ROUTES.PRODUCTSUBTYPEADD} element={<ProductSubtypeAdd/>} />
         <Route path={ROUTES.PRODUCTITEM} element={<ProductItem/>} />
         <Route path={ROUTES.PRODUCTITEMADD} element={<ProductItemAdd/>} />
-        <Route path={ROUTES.ITEM} element={<AdminItem/>}/>
+        <Route path={ROUTES.ITEM} element={<Item/>}/>
+        <Route path={ROUTES.ITEMADD} element={<ItemAdd/>}/>
     </Routes>
   )
 }

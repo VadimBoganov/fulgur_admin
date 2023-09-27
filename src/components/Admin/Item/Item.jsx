@@ -1,11 +1,110 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Sidebar from "../Sidebar";
 import styles from "../Admin.module.scss";
-import ItemForm from "./ItemForm";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
+import {fetchProductItems} from "../../../app/productItemsSlice";
+import { fetchItems,  removeItem, updateItem } from "../../../app/itemsSlice";
 
 const Item = () => {
-  return (<div className={styles.container}>
-    <ItemForm/>
-  </div>)
+  const dispatch = useDispatch();
+
+  const [file, setFile] = useState("");
+  const [value, setValue] = useState("");
+  const [price, setPrice] = useState(0);
+
+  const productItems = useSelector(({ productitems }) => productitems);
+
+  useEffect(() => {
+    dispatch(fetchItems());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchProductItems());
+  }, [dispatch]);
+
+  const { list } = useSelector(({ items }) => items);
+
+  const [selectValue, setSelectValue] = useState();
+
+  return (
+    <div className={styles.admin}>
+      <Sidebar />
+      <div className={styles.container}>
+        <NavLink
+          className={({ isActive }) =>
+            `${styles.link} ${isActive ? styles.active : ""}`
+          }
+          to={`/admin/item/add`}
+        >
+          <button className={styles.add_button}>Добавить</button>
+        </NavLink>
+        {list &&
+          list.map(({ Id, ProductItemId, Name, Price, ImageUrl }) => (
+            <form key={Id} className={styles.form}>
+              <label htmlFor="file">Изображение:</label>
+              <input
+                id="file"
+                type="file"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+              {ImageUrl && <img src={ImageUrl} alt="file" />}
+              {file && <><span style={{margin:"auto"}}>Заменить на:</span><img src={URL.createObjectURL(file)} alt="file"/></>}
+              <label htmlFor="addItem">Название продукта:</label>
+              <select
+                id="addItem"
+                name="product items"
+                onChange={(e) => setSelectValue(e.target.value)}
+              >
+                {productItems.list &&
+                  productItems.list.map(({ Id, Name }) => (
+                    <option key={Id} value={Name}>
+                      {Name}
+                    </option>
+                  ))}
+              </select>
+              <label htmlFor="productName">Название:</label>
+              <input
+                id="productName"
+                type="text"
+                placeholder={Name}
+                autoComplete="off"
+                onChange={(e) => setValue(e.target.value)}
+              />
+              <label htmlFor="price">Цена (от):</label>
+              <input id="price" type="number" placeholder={Price} min="0" onChange={(e) => setPrice(e.target.value)}/>
+              <section>
+            <button
+              className={styles.button}
+              onClick={(e) => {
+                e.preventDefault();
+                const productItem = selectValue === null || selectValue === undefined ? productItems.list[0] : productItems.list.filter((item) => item.Name === selectValue)[0]
+                const name = value ? value : Name
+                const _price = price ? price : Price
+                dispatch(
+                  updateItem({Id: Id, ProductItemId: productItem.Id, Name: name, Price: _price, File: file })
+                );
+                setValue('');
+                setFile(null)
+              }}
+            >
+              Обновить
+            </button>
+            <button
+              className={styles.remove_button}
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(removeItem(Id));
+              }}
+            >
+              Удалить
+            </button>
+          </section>
+            </form>
+          ))}
+      </div>
+    </div>
+  );
 };
 
 export default Item;

@@ -4,16 +4,27 @@ import { NavLink } from "react-router-dom";
 import styles from "../Admin.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductSubtypes } from "../../../app/productSubtypeSlice";
+import {fetchProductItems, removeProductItem, updateProductItem} from "../../../app/productItemsSlice"
 
 const ProductItem = () => {
   const dispatch = useDispatch();
-  const prodSubTypes = useSelector(({ productsubtypes }) => productsubtypes);
-
+ 
   const [file, setFile] = useState("");
+  const [value, setValue] = useState("");
+
+  const prodSubTypes = useSelector(({ productsubtypes }) => productsubtypes);
 
   useEffect(() => {
     dispatch(fetchProductSubtypes());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchProductItems())
+  }, [dispatch])
+
+  const { list } = useSelector(({ productitems }) => productitems);
+  
+  const [selectValue, setSelectValue] = useState();
 
   return (
     <div className={styles.admin}>
@@ -27,16 +38,18 @@ const ProductItem = () => {
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>
-        <form className={styles.form}>
+        {list && list.map(({Id, ProductSubTypeId, Name, ImageUrl}) => (
+          <form key={Id} className={styles.form}>
           <label htmlFor="file">Изображение:</label>
           <input
             id="file"
             type="file"
-            onChange={(e) => setFile(URL.createObjectURL(e.target.files[0]))}
+            onChange={(e) => setFile(e.target.files[0])}
           />
-          {file && <img src={file} alt="file" />}
+          {ImageUrl && <img src={ImageUrl} alt="file" />}
+          {file && <><span style={{margin:"auto"}}>Заменить на:</span><img src={URL.createObjectURL(file)} alt="file"/></>}
           <label htmlFor="addItem">Название продукта:</label>
-          <select id="addItem" name="product items">
+          <select id="addItem" name="product items" onChange={(e) => setSelectValue(e.target.value)}>
             {prodSubTypes.list &&
               prodSubTypes.list.map(({ Id, Name }) => (
                 <option key={Id} value={Name}>
@@ -44,23 +57,26 @@ const ProductItem = () => {
                 </option>
               ))}
           </select>
-          <label htmlFor="productName">Название:</label>
+          <label htmlFor="productItemName">{Name}:</label>
           <input
-            id="productName"
+            id="productItemName"
             type="text"
-            placeholder="Написать..."
+            placeholder={Name}
             autoComplete="off"
+            onChange={(e) => setValue(e.target.value)}
           />
           <section>
             <button
               className={styles.button}
               onClick={(e) => {
                 e.preventDefault();
-                // const prod = prods.list.filter((item) => item.Name === selectValue)[0]
-                // dispatch(
-                //   updateProductType({Id: Id, ProductId: prod.Id, Name: value })
-                // );
-                // setValue('');
+                const prodSubType = selectValue === null || selectValue === undefined ? prodSubTypes.list[0] : prodSubTypes.list.filter((item) => item.Name === selectValue)[0]
+                const name = value ? value : Name
+                dispatch(
+                  updateProductItem({Id: Id, ProductSubTypeId: prodSubType.Id, Name: name, File: file })
+                );
+                setValue('');
+                setFile(null)
               }}
             >
               Обновить
@@ -69,13 +85,14 @@ const ProductItem = () => {
               className={styles.remove_button}
               onClick={(e) => {
                 e.preventDefault();
-                //dispatch(removeProductType(Id));
+                dispatch(removeProductItem(Id));
               }}
             >
               Удалить
             </button>
           </section>
         </form>
+        ))}        
       </div>
     </div>
   );
