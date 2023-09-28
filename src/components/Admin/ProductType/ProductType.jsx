@@ -8,19 +8,24 @@ import {
   removeProductType,
   updateProductType,
 } from "../../../app/productTypesSlice";
+import { fetchProducts } from "../../../app/productsSlice";
 
 const ProductType = () => {
   const dispatch = useDispatch();
   const prods = useSelector(({ products }) => products);
   const [value, setValue] = useState("");
-  
+
   useEffect(() => {
     dispatch(fetchProductTypes());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
+
   const { list } = useSelector(({ producttypes }) => producttypes);
 
-  const [selectValue, setSelectValue] = useState(prods.list[0].Name);
+  const [selectValue, setSelectValue] = useState();
 
   return (
     <div className={styles.admin}>
@@ -41,7 +46,6 @@ const ProductType = () => {
               <select
                 id="productType"
                 name="product types"
-                defaultValue={prods.list.filter((item) => item.Id === ProductId)[0].Name || selectValue}
                 onChange={(e) => setSelectValue(e.target.value)}
               >
                 {prods.list &&
@@ -51,7 +55,7 @@ const ProductType = () => {
                     </option>
                   ))}
               </select>
-              <label htmlFor={Id}>{Name}:</label>
+              <label htmlFor={Id}>Название:</label>
               <input
                 id={Id}
                 type="text"
@@ -64,9 +68,9 @@ const ProductType = () => {
                   className={styles.button}
                   onClick={(e) => {
                     e.preventDefault();
-                    const prod = prods.list.filter((item) => item.Name === selectValue)[0]
+                    const prod = selectValue === null || selectValue === undefined ? prods.list[0] : prods.list.filter((item) => item.Name === selectValue)[0]
                     dispatch(
-                      updateProductType({Id: Id, ProductId: prod.Id, Name: value })
+                      updateProductType({Id: Id, ProductId: prod.Id, Name: value || Name })
                     );
                     setValue('');
                   }}

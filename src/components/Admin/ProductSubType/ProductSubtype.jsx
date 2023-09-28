@@ -25,7 +25,7 @@ const ProductSubtype = () => {
 
   const { list } = useSelector(({ productsubtypes }) => productsubtypes);
 
-  const [selectValue, setSelectValue] = useState(prodTypes.list[0].Name);
+  const [selectValue, setSelectValue] = useState();
 
   return (
     <div className={styles.admin}>
@@ -46,10 +46,6 @@ const ProductSubtype = () => {
               <select
                 id="productSubtype"
                 name="product sub types"
-                defaultValue={
-                  prodTypes.list.filter((item) => item.Id === ProductTypeId)[0]
-                    .Name || selectValue
-                }
                 onChange={(e) => setSelectValue(e.target.value)}
               >
                 {prodTypes.list &&
@@ -59,7 +55,7 @@ const ProductSubtype = () => {
                     </option>
                   ))}
               </select>
-              <label htmlFor={Id}>{Name}:</label>
+              <label htmlFor={Id}>Название:</label>
               <input
                 id={Id}
                 type="text"
@@ -72,14 +68,17 @@ const ProductSubtype = () => {
                   className={styles.button}
                   onClick={(e) => {
                     e.preventDefault();
-                    const prodType = prodTypes.list.filter(
-                      (item) => item.Name === selectValue
-                    )[0];
+                    const prodType =
+                      selectValue === null || selectValue === undefined
+                        ? prodTypes.list[0]
+                        : prodTypes.list.filter(
+                            (item) => item.Name === selectValue
+                          )[0];
                     dispatch(
                       updateProductSubtype({
                         Id: Id,
                         ProductTypeId: prodType.Id,
-                        Name: value,
+                        Name: value || Name,
                       })
                     );
                     setValue("");

@@ -30,8 +30,8 @@ const Product = () => {
         {list &&
           list.map(({ Id, Name }) => (
             <form key={Id} className={styles.form}>
-              <label htmlFor={Id}>{Name}:</label>
-              <input
+              <label htmlFor={Id}>Название:</label>
+              <input  
                 id={Id}
                 type="text"
                 placeholder={Name}
@@ -43,7 +43,7 @@ const Product = () => {
                   className={styles.button}
                   onClick={(e) => {
                     e.preventDefault();
-                    dispatch(updateProduct({ id: Id, name: value }));
+                    dispatch(updateProduct({ id: Id, name: value || Name }));
                     setValue("");
                   }}
                 >
