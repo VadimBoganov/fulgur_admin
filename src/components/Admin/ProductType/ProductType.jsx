@@ -46,6 +46,7 @@ const ProductType = () => {
               <select
                 id="productType"
                 name="product types"
+                defaultValue={prods.list.length > 0 && prods.list.filter((item) => item.Id === ProductId)[0].Name}
                 onChange={(e) => setSelectValue(e.target.value)}
               >
                 {prods.list &&

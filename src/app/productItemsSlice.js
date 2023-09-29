@@ -63,6 +63,7 @@ const productItemsSlice = createSlice({
             const ind = state.list.findIndex(o => o.Id === payload.Id)
             state.list[ind].Name = payload.Name
             state.list[ind].ImageUrl = payload.ImageUrl
+            state.list[ind].ProductSubTypeId = payload.ProductSubTypeId
         })
     }
 })

@@ -24,6 +24,7 @@ export const addItem = createAsyncThunk('addItem', async(data, thunkApi) => {
 
 export const updateItem = createAsyncThunk('updateItem', async(data, thunkApi) => {
     try{ 
+        console.log(data)
         const resp = await axios.put(config.itemsUrl, data, { headers: {'Content-Type': 'multipart/form-data'}});
         return resp.data;
     }catch(err){

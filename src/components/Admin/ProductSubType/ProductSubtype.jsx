@@ -46,6 +46,7 @@ const ProductSubtype = () => {
               <select
                 id="productSubtype"
                 name="product sub types"
+                defaultValue={prodTypes.list.length > 0 && prodTypes.list.filter((item) => item.Id === ProductTypeId)[0].Name}
                 onChange={(e) => setSelectValue(e.target.value)}
               >
                 {prodTypes.list &&

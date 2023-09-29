@@ -49,7 +49,7 @@ const ProductItem = () => {
           {ImageUrl && <img src={ImageUrl} alt="file" />}
           {file && <><span style={{margin:"auto"}}>Заменить на:</span><img src={URL.createObjectURL(file)} alt="file"/></>}
           <label htmlFor="addItem">Название продукта:</label>
-          <select id="addItem" name="product items" onChange={(e) => setSelectValue(e.target.value)}>
+          <select id="addItem" name="product items" defaultValue={prodSubTypes.list.length > 0 && prodSubTypes.list.filter((item) => item.Id === ProductSubTypeId)[0].Name} onChange={(e) => setSelectValue(e.target.value)}>
             {prodSubTypes.list &&
               prodSubTypes.list.map(({ Id, Name }) => (
                 <option key={Id} value={Name}>
@@ -57,7 +57,7 @@ const ProductItem = () => {
                 </option>
               ))}
           </select>
-          <label htmlFor="productItemName">{Name}:</label>
+          <label htmlFor="productItemName">Название:</label>
           <input
             id="productItemName"
             type="text"

@@ -4,7 +4,7 @@ import styles from "../Admin.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import {fetchProductItems} from "../../../app/productItemsSlice";
-import { fetchItems,  removeItem, updateItem } from "../../../app/itemsSlice";
+import { fetchItems, removeItem, updateItem } from "../../../app/itemsSlice";
 
 const Item = () => {
   const dispatch = useDispatch();
@@ -54,6 +54,7 @@ const Item = () => {
               <select
                 id="addItem"
                 name="product items"
+                defaultValue={productItems.list.length > 0 && productItems.list.filter((item) => item.Id === ProductItemId)[0].Name}
                 onChange={(e) => setSelectValue(e.target.value)}
               >
                 {productItems.list &&
@@ -79,13 +80,12 @@ const Item = () => {
               onClick={(e) => {
                 e.preventDefault();
                 const productItem = selectValue === null || selectValue === undefined ? productItems.list[0] : productItems.list.filter((item) => item.Name === selectValue)[0]
-                const name = value ? value : Name
-                const _price = price ? price : Price
+                console.log(file)
                 dispatch(
-                  updateItem({Id: Id, ProductItemId: productItem.Id, Name: name, Price: _price, File: file })
+                  updateItem({Id: Id, ProductItemId: productItem.Id, Name: value || Name, Price: price || Price, File: file })
                 );
                 setValue('');
-                setFile(null)
+                setFile('')
               }}
             >
               Обновить
