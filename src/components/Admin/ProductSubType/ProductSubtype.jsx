@@ -51,17 +51,11 @@ const ProductSubtype = () => {
                     <select
                       id="productSubtype"
                       name="product sub types"
-                      defaultValue={
-                        prodTypes.list.length > 0 &&
-                        prodTypes.list.filter(
-                          (item) => item.Id === ProductTypeId
-                        )[0].Name
-                      }
                       onChange={(e) => setSelectValue(e.target.value)}
                     >
                       {prodTypes.list &&
                         prodTypes.list.map(({ Id, Name }) => (
-                          <option key={Id} value={Name}>
+                          <option key={Id} value={Name} selected={Id === ProductTypeId}>
                             {Name}
                           </option>
                         ))}

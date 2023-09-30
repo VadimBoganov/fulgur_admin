@@ -67,17 +67,11 @@ const ProductItem = () => {
                     <select
                       id="addItem"
                       name="product items"
-                      defaultValue={
-                        prodSubTypes.list.length > 0 &&
-                        prodSubTypes.list.filter(
-                          (item) => item.Id === ProductSubTypeId
-                        )[0].Name
-                      }
                       onChange={(e) => setSelectValue(e.target.value)}
                     >
                       {prodSubTypes.list &&
                         prodSubTypes.list.map(({ Id, Name }) => (
-                          <option key={Id} value={Name}>
+                          <option key={Id} value={Name} selected={Id === ProductSubTypeId}>
                             {Name}
                           </option>
                         ))}
