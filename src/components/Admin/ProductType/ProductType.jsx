@@ -9,6 +9,7 @@ import {
   updateProductType,
 } from "../../../app/productTypesSlice";
 import { fetchProducts } from "../../../app/productsSlice";
+import { Accordion } from "react-bootstrap";
 
 const ProductType = () => {
   const dispatch = useDispatch();
@@ -20,8 +21,8 @@ const ProductType = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchProducts())
-  }, [dispatch])
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   const { list } = useSelector(({ producttypes }) => producttypes);
 
@@ -39,57 +40,77 @@ const ProductType = () => {
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>
-        {list &&
-          list.map(({ Id, ProductId, Name }) => (
-            <form key={Id} className={styles.form}>
-              <label htmlFor="productType">Название продукции:</label>
-              <select
-                id="productType"
-                name="product types"
-                defaultValue={prods.list.length > 0 && prods.list.filter((item) => item.Id === ProductId)[0].Name}
-                onChange={(e) => setSelectValue(e.target.value)}
-              >
-                {prods.list &&
-                  prods.list.map(({ Id, Name }) => (
-                    <option key={Id} value={Name}>
-                      {Name}
-                    </option>
-                  ))}
-              </select>
-              <label htmlFor={Id}>Название:</label>
-              <input
-                id={Id}
-                type="text"
-                placeholder={Name}
-                autoComplete="off"
-                onChange={(e) => setValue(e.target.value)}
-              />
-              <section>
-                <button
-                  className={styles.button}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const prod = selectValue === null || selectValue === undefined ? prods.list[0] : prods.list.filter((item) => item.Name === selectValue)[0]
-                    dispatch(
-                      updateProductType({Id: Id, ProductId: prod.Id, Name: value || Name })
-                    );
-                    setValue('');
-                  }}
-                >
-                  Обновить
-                </button>
-                <button
-                  className={styles.remove_button}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    dispatch(removeProductType(Id));
-                  }}
-                >
-                  Удалить
-                </button>
-              </section>
-            </form>
-          ))}
+        <Accordion data-bs-theme="dark">
+          {list &&
+            list.map(({ Id, ProductId, Name }) => (
+              <Accordion.Item key={Id} eventKey={Id}>
+                <Accordion.Header>{Name}</Accordion.Header>
+                <Accordion.Body>
+                  <form key={Id} className={styles.form}>
+                    <label htmlFor="productType">Название продукции:</label>
+                    <select
+                      id="productType"
+                      name="product types"
+                      defaultValue={
+                        prods.list.length > 0 &&
+                        prods.list.filter((item) => item.Id === ProductId)[0]
+                          .Name
+                      }
+                      onChange={(e) => setSelectValue(e.target.value)}
+                    >
+                      {prods.list &&
+                        prods.list.map(({ Id, Name }) => (
+                          <option key={Id} value={Name}>
+                            {Name}
+                          </option>
+                        ))}
+                    </select>
+                    <label htmlFor={Id}>Название:</label>
+                    <input
+                      id={Id}
+                      type="text"
+                      placeholder={Name}
+                      autoComplete="off"
+                      onChange={(e) => setValue(e.target.value)}
+                    />
+                    <section>
+                      <button
+                        className={styles.button}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const prod =
+                            selectValue === null || selectValue === undefined
+                              ? prods.list[0]
+                              : prods.list.filter(
+                                  (item) => item.Name === selectValue
+                                )[0];
+                          dispatch(
+                            updateProductType({
+                              Id: Id,
+                              ProductId: prod.Id,
+                              Name: value || Name,
+                            })
+                          );
+                          setValue("");
+                        }}
+                      >
+                        Обновить
+                      </button>
+                      <button
+                        className={styles.remove_button}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          dispatch(removeProductType(Id));
+                        }}
+                      >
+                        Удалить
+                      </button>
+                    </section>
+                  </form>
+                </Accordion.Body>
+              </Accordion.Item>
+            ))}
+        </Accordion>
       </div>
     </div>
   );

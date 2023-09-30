@@ -9,6 +9,7 @@ import {
 } from "../../../app/productSubtypeSlice";
 import styles from "../Admin.module.scss";
 import { fetchProductTypes } from "../../../app/productTypesSlice";
+import { Accordion } from "react-bootstrap";
 
 const ProductSubtype = () => {
   const dispatch = useDispatch();
@@ -39,66 +40,78 @@ const ProductSubtype = () => {
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>
-        {list &&
-          list.map(({ Id, ProductTypeId, Name }) => (
-            <form key={Id} className={styles.form}>
-              <label htmlFor="productSubtype">Название продукции:</label>
-              <select
-                id="productSubtype"
-                name="product sub types"
-                defaultValue={prodTypes.list.length > 0 && prodTypes.list.filter((item) => item.Id === ProductTypeId)[0].Name}
-                onChange={(e) => setSelectValue(e.target.value)}
-              >
-                {prodTypes.list &&
-                  prodTypes.list.map(({ Id, Name }) => (
-                    <option key={Id} value={Name}>
-                      {Name}
-                    </option>
-                  ))}
-              </select>
-              <label htmlFor={Id}>Название:</label>
-              <input
-                id={Id}
-                type="text"
-                placeholder={Name}
-                autoComplete="off"
-                onChange={(e) => setValue(e.target.value)}
-              />
-              <section>
-                <button
-                  className={styles.button}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const prodType =
-                      selectValue === null || selectValue === undefined
-                        ? prodTypes.list[0]
-                        : prodTypes.list.filter(
-                            (item) => item.Name === selectValue
-                          )[0];
-                    dispatch(
-                      updateProductSubtype({
-                        Id: Id,
-                        ProductTypeId: prodType.Id,
-                        Name: value || Name,
-                      })
-                    );
-                    setValue("");
-                  }}
-                >
-                  Обновить
-                </button>
-                <button
-                  className={styles.remove_button}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    dispatch(removeProductSubtype(Id));
-                  }}
-                >
-                  Удалить
-                </button>
-              </section>
-            </form>
-          ))}
+        <Accordion data-bs-theme="dark">
+          {list &&
+            list.map(({ Id, ProductTypeId, Name }) => (
+              <Accordion.Item key={Id} eventKey={Id}>
+                <Accordion.Header>{Name}</Accordion.Header>
+                <Accordion.Body>
+                  <form key={Id} className={styles.form}>
+                    <label htmlFor="productSubtype">Название продукции:</label>
+                    <select
+                      id="productSubtype"
+                      name="product sub types"
+                      defaultValue={
+                        prodTypes.list.length > 0 &&
+                        prodTypes.list.filter(
+                          (item) => item.Id === ProductTypeId
+                        )[0].Name
+                      }
+                      onChange={(e) => setSelectValue(e.target.value)}
+                    >
+                      {prodTypes.list &&
+                        prodTypes.list.map(({ Id, Name }) => (
+                          <option key={Id} value={Name}>
+                            {Name}
+                          </option>
+                        ))}
+                    </select>
+                    <label htmlFor={Id}>Название:</label>
+                    <input
+                      id={Id}
+                      type="text"
+                      placeholder={Name}
+                      autoComplete="off"
+                      onChange={(e) => setValue(e.target.value)}
+                    />
+                    <section>
+                      <button
+                        className={styles.button}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const prodType =
+                            selectValue === null || selectValue === undefined
+                              ? prodTypes.list[0]
+                              : prodTypes.list.filter(
+                                  (item) => item.Name === selectValue
+                                )[0];
+                          dispatch(
+                            updateProductSubtype({
+                              Id: Id,
+                              ProductTypeId: prodType.Id,
+                              Name: value || Name,
+                            })
+                          );
+                          setValue("");
+                        }}
+                      >
+                        Обновить
+                      </button>
+                      <button
+                        className={styles.remove_button}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          dispatch(removeProductSubtype(Id));
+                        }}
+                      >
+                        Удалить
+                      </button>
+                    </section>
+                  </form>
+                </Accordion.Body>
+              </Accordion.Item>
+            ))}
+        </Accordion>
       </div>
     </div>
   );
