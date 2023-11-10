@@ -1,9 +1,9 @@
-import Product from "../Admin/Products/Product";
+import Login from "../Auth/Login";
 
 const Admin = () => {
 
   return (
-    <Product/>
+    <Login/>
   );
 };
 
