@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import { fetchProductItems } from "../../../app/productItemsSlice";
 import { fetchItems, removeItem, updateItem } from "../../../app/itemsSlice";
 import { Accordion } from "react-bootstrap";
+import { fetchUsers } from "../../../app/usersSlice";
 
 const Item = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,10 @@ const Item = () => {
   const [price, setPrice] = useState(0);
 
   const productItems = useSelector(({ productitems }) => productitems);
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[dispatch])
 
   useEffect(() => {
     dispatch(fetchItems());

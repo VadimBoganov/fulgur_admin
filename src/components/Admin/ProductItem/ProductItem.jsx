@@ -10,6 +10,7 @@ import {
   updateProductItem,
 } from "../../../app/productItemsSlice";
 import { Accordion } from "react-bootstrap";
+import { fetchUsers } from "../../../app/usersSlice";
 
 const ProductItem = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,10 @@ const ProductItem = () => {
   const [value, setValue] = useState("");
 
   const prodSubTypes = useSelector(({ productsubtypes }) => productsubtypes);
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[dispatch])
 
   useEffect(() => {
     dispatch(fetchProductSubtypes());

@@ -5,12 +5,17 @@ import Sidebar from "../Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductSubtypes } from "../../../app/productSubtypeSlice";
 import { addProductItem } from "../../../app/productItemsSlice";
+import { fetchUsers } from "../../../app/usersSlice";
 
 const ProductItemAdd = () => {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState();
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[dispatch])
 
   useEffect(() => {
     dispatch(fetchProductSubtypes());

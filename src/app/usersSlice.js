@@ -5,16 +5,21 @@ import config from "../config/config.json"
 export const fetchUsers = createAsyncThunk('fetchUsers', async(_, thunkApi) => {
     try{
         const resp = await axios.get(config.baseUrl + "/api/user", {withCredentials:true})
-        return resp.data
+        if (resp.data.id > 0)
+            return resp.data
+        else {
+            window.location.href="/admin";            
+            return false;
+        }
     }
     catch(err){
-        console.log(err);
-        return thunkApi.rejectWithValue(err);
+        window.location.href="/admin";
+        return false;
     }
 }) 
 
 export const removeUser = createAsyncThunk('removeUser', async() => {
-
+    
 })
 
 const usersSlice = createSlice({

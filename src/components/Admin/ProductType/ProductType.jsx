@@ -10,11 +10,17 @@ import {
 } from "../../../app/productTypesSlice";
 import { fetchProducts } from "../../../app/productsSlice";
 import { Accordion } from "react-bootstrap";
+import { fetchUsers } from "../../../app/usersSlice";
 
 const ProductType = () => {
   const dispatch = useDispatch();
   const prods = useSelector(({ products }) => products);
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[dispatch])
+
 
   useEffect(() => {
     dispatch(fetchProductTypes());
@@ -51,11 +57,12 @@ const ProductType = () => {
                     <select
                       id="productType"
                       name="product types"
+                      defaultValue={Id === ProductId}
                       onChange={(e) => setSelectValue(e.target.value)}
                     >
                       {prods.list &&
                         prods.list.map(({ Id, Name }) => (
-                          <option key={Id} value={Name} selected={Id === ProductId}>
+                          <option key={Id} value={Name}>
                             {Name}
                           </option>
                         ))}

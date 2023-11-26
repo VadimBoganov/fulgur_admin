@@ -2,17 +2,14 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styles from "./Sidebar.module.scss";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { removeUser } from "../../app/usersSlice";
 
 const Sidebar = () => {
-  const dispatch = useDispatch()
 
   const logout = async (e) => {
     e.preventDefault();
-    const user = await axios.get('http://localhost:8000/api/user', {withCredentials: true})
     await axios.post('http://localhost:8000/api/logout', {}, {withCredentials: true})
-    dispatch(removeUser(user.Id))
+    window.location.href="/admin";
+    return false;
   }
 
   return (
@@ -76,7 +73,7 @@ const Sidebar = () => {
         <a className={styles.link} href="/">
           Помощь
         </a>
-        <a className={styles.link} style={{textDecoration: 'underline'}} onClick={() => logout} href="/admin">
+        <a className={styles.link} style={{textDecoration: 'underline'}} onClick={logout} href="/admin">
           Выйти
         </a>
       </div>

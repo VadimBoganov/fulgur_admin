@@ -5,6 +5,7 @@ import { fetchProductItems } from "../../../app/productItemsSlice";
 import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
 import { addItem } from "../../../app/itemsSlice";
+import { fetchUsers } from "../../../app/usersSlice";
 
 const ItemAdd = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,10 @@ const ItemAdd = () => {
   const [file, setFile] = useState();
   const [value, setValue] = useState("");
   const [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[dispatch])
 
   useEffect(() => {
     dispatch(fetchProductItems());

@@ -10,11 +10,16 @@ import {
 import styles from "../Admin.module.scss";
 import { fetchProductTypes } from "../../../app/productTypesSlice";
 import { Accordion } from "react-bootstrap";
+import { fetchUsers } from "../../../app/usersSlice";
 
 const ProductSubtype = () => {
   const dispatch = useDispatch();
   const prodTypes = useSelector(({ producttypes }) => producttypes);
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[dispatch])
 
   useEffect(() => {
     dispatch(fetchProductTypes());

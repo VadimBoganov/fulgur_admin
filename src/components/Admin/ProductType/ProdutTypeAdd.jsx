@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../Admin.module.scss";
 import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
 import { addProductType } from "../../../app/productTypesSlice";
+import { fetchUsers } from "../../../app/usersSlice";
 
 const ProdutTypeForm = () => {
   const dispatch = useDispatch();
   const { list } = useSelector(({ products }) => products);
   const [value, setValue] = useState("");
   const [selectValue, setSelectValue] = useState(list[0].Name);
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[dispatch])
 
   return (
     <div className={styles.admin}>

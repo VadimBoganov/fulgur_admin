@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink} from "react-router-dom";
 import Sidebar from "../Sidebar";
 import { Accordion } from "react-bootstrap";
+import { fetchUsers } from "../../../app/usersSlice";
 
 const Product = () => {
   
@@ -16,6 +17,10 @@ const Product = () => {
   const [value, setValue] = useState("");
 
   const { list } = useSelector(({ products }) => products);
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[dispatch])
 
   useEffect(() => {
     dispatch(fetchProducts());
