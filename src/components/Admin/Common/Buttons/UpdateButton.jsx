@@ -1,9 +1,8 @@
 import React from "react";
 import styles from "../../Admin.module.scss";
 import { useDispatch } from "react-redux";
-import { updateProduct } from "../../../../app/productsSlice";
 
-const UpdateButton = (props) => {
+const UpdateButton = ({data, func}) => {
   const dispatch = useDispatch();
 
   return (
@@ -11,7 +10,7 @@ const UpdateButton = (props) => {
       className={styles.button}
       onClick={(e) => {
         e.preventDefault();
-        dispatch(updateProduct(props.data));
+        dispatch(func(data));
       }}
     >
       Обновить

@@ -10,6 +10,7 @@ import { NavLink} from "react-router-dom";
 import Sidebar from "../Sidebar";
 import { Accordion } from "react-bootstrap";
 import { fetchUsers } from "../../../app/usersSlice";
+import { fetchProductItems } from "../../../app/productItemsSlice";
 
 const Product = () => {
   
@@ -21,6 +22,10 @@ const Product = () => {
   useEffect(() => {
     dispatch(fetchUsers())
   },[dispatch])
+
+  useEffect(() => {
+    dispatch(fetchProductItems());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchProducts());

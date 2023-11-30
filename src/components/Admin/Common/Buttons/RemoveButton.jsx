@@ -1,17 +1,16 @@
 import React from "react";
 import styles from "../../Admin.module.scss";
 import { useDispatch } from "react-redux";
-import { removeProduct } from "../../../../app/productsSlice";
 
-const RemoveButton = (props) => {
+const RemoveButton = ({id, func}) => {
   const dispatch = useDispatch();
 
   return (
     <button
-      className={styles.removeBtn}
+      className={styles.remove_button}
       onClick={(e) => {
         e.preventDefault();
-        dispatch(removeProduct(props.data));
+        dispatch(func(id));
       }}
     >
       Удалить

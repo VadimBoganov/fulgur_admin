@@ -1,6 +1,6 @@
 import React from "react";
 
-const StringInput = ({ id, value, setValue, labelValue}) => {
+const NumberInput = ({ id, value, setValue, labelValue}) => {
   const hash = require("object-hash");
   const hashValue = hash({
     id: id,
@@ -14,13 +14,13 @@ const StringInput = ({ id, value, setValue, labelValue}) => {
       <label htmlFor={hashValue}>{labelValue}:</label>
       <input
         id={hashValue}
-        type="text"
+        type="number"
         placeholder={value}
-        autoComplete="off"
+        min="0"
         onChange={(e) => setValue(e.target.value)}
       />
     </>
   );
 };
 
-export default StringInput;
+export default NumberInput;

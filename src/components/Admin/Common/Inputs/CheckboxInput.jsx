@@ -1,6 +1,7 @@
 import React from "react";
+import styles from '../../Admin.module.scss'
 
-const StringInput = ({ id, value, setValue, labelValue}) => {
+const CheckboxInput = ({ id, value,  setValue, labelValue }) => {
   const hash = require("object-hash");
   const hashValue = hash({
     id: id,
@@ -14,13 +15,13 @@ const StringInput = ({ id, value, setValue, labelValue}) => {
       <label htmlFor={hashValue}>{labelValue}:</label>
       <input
         id={hashValue}
-        type="text"
-        placeholder={value}
-        autoComplete="off"
-        onChange={(e) => setValue(e.target.value)}
+        type="checkbox"
+        defaultChecked={value}
+        className={styles.checkbox}
+        onChange={(e) => setValue(e.target.checked)}
       />
     </>
   );
 };
 
-export default StringInput;
+export default CheckboxInput;

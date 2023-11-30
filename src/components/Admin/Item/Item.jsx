@@ -7,31 +7,46 @@ import { fetchProductItems } from "../../../app/productItemsSlice";
 import { fetchItems, removeItem, updateItem } from "../../../app/itemsSlice";
 import { Accordion } from "react-bootstrap";
 import { fetchUsers } from "../../../app/usersSlice";
+import CheckboxInput from "../Common/Inputs/CheckboxInput";
+import DropdownInput from "../Common/Inputs/DropdownInput";
+import FileInput from "../Common/Inputs/FileInput";
+import NumberInput from "../Common/Inputs/NumberInput";
+import StringInput from "../Common/Inputs/StringInput";
+import RemoveButton from "../Common/Buttons/RemoveButton";
+import UpdateButton from "../Common/Buttons/UpdateButton";
 
 const Item = () => {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState("");
-  const [value, setValue] = useState("");
+  const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-
-  const productItems = useSelector(({ productitems }) => productitems);
-
-  useEffect(() => {
-    dispatch(fetchUsers())
-  },[dispatch])
+  const [isFullPrice, setIsFullPrice] = useState();
 
   useEffect(() => {
-    dispatch(fetchItems());
+    dispatch(fetchUsers());
   }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchProductItems());
   }, [dispatch]);
 
-  const { list } = useSelector(({ items }) => items);
+  useEffect(() => {
+    dispatch(fetchItems());
+  }, [dispatch]);
 
-  const [selectValue, setSelectValue] = useState();
+  const [selectValue, setSelectValue] = useState(false);
+
+  const productItems = useSelector(({ productitems }) => productitems);
+  const items = useSelector(({ items }) => items);
+
+  const groups = items.list.reduce((item, {Id, ProductItemId, Name, Price, IsFullPrice}) => {
+    if(!item[ProductItemId]) item[ProductItemId] = [];
+    item[ProductItemId].push({Id, Name, Price, IsFullPrice})
+    return item
+  }, {})
+
+  //Object.entries(groups).forEach((group) =>group[1].map(({Id, ProductItemId, Name, Price, IsFullPrice}, index) => console.log(index)))
 
   return (
     <div className={styles.admin}>
@@ -46,90 +61,53 @@ const Item = () => {
           <button className={styles.add_button}>Добавить</button>
         </NavLink>
         <Accordion data-bs-theme="dark">
-          {list &&
-            list.map(({ Id, ProductItemId, Name, Price, ImageUrl }) => (
+          {groups && 
+            items.list.map(({ Id, ProductItemId, Name, Price, IsFullPrice }, index) => (
               <Accordion.Item key={Id} eventKey={Id}>
                 <Accordion.Header>{Name}</Accordion.Header>
                 <Accordion.Body>
                   <form key={Id} className={styles.form}>
-                    <label htmlFor="file">Изображение:</label>
-                    <input
-                      id="file"
-                      type="file"
-                      onChange={(e) => setFile(e.target.files[0])}
+                    <FileInput
+                      item={items.list[index]}
+                      labelValue={"Изображение"}
+                      setValue={setFile}
                     />
-                    {ImageUrl && <img src={ImageUrl} alt="file" />}
-                    {file && (
-                      <>
-                        <span style={{ margin: "auto" }}>Заменить на:</span>
-                        <img src={URL.createObjectURL(file)} alt="file" />
-                      </>
-                    )}
-                    <label htmlFor="addItem">Название продукта:</label>
-                    <select
-                      id="addItem"
-                      name="product items"
-                      onChange={(e) => setSelectValue(e.target.value)}
-                    >
-                      {productItems.list &&
-                        productItems.list.map(({ Id, Name }) => (
-                          <option key={Id} value={Name} selected={Id === ProductItemId}>
-                            {Name}
-                          </option>
-                        ))}
-                    </select>
-                    <label htmlFor="productName">Название:</label>
-                    <input
-                      id="productName"
-                      type="text"
-                      placeholder={Name}
-                      autoComplete="off"
-                      onChange={(e) => setValue(e.target.value)}
+                    <DropdownInput
+                      id={Id}
+                      value={ProductItemId}
+                      labelValue={"Название продукта"}
+                      setValue={setSelectValue}
+                      options={productItems.list}
                     />
-                    <label htmlFor="price">Цена (от):</label>
-                    <input
-                      id="price"
-                      type="number"
-                      placeholder={Price}
-                      min="0"
-                      onChange={(e) => setPrice(e.target.value)}
+                    <StringInput
+                      id={Id}
+                      value={Name}
+                      labelValue={"Название изделия"}
+                      setValue={setName}
                     />
+                    <div className={styles.price}>
+                      <NumberInput
+                        id={Id}
+                        value={Price}
+                        labelValue={"Цена"}
+                        setValue={setPrice}
+                      />
+                      <CheckboxInput
+                        id={Id}
+                        value={IsFullPrice}
+                        labelValue={"Выводить цену (от)"}
+                        setValue={setIsFullPrice}
+                      />
+                    </div>
                     <section>
-                      <button
-                        className={styles.button}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          const productItem =
-                            selectValue === null || selectValue === undefined
-                              ? productItems.list[0]
-                              : productItems.list.filter(
-                                  (item) => item.Name === selectValue
-                                )[0];
-                          console.log(file);
-                          dispatch(
-                            updateItem({
-                              Id: Id,
-                              ProductItemId: productItem.Id,
-                              Name: value || Name,
+                      <UpdateButton data={{Id: Id,
+                              ProductItemId: selectValue ? productItems.list.filter((pi) => pi.Name === selectValue)[0]?.Id : ProductItemId,
+                              Name: name || Name,
                               Price: price || Price,
+                              IsFullPrice: isFullPrice === undefined ? IsFullPrice : isFullPrice,
                               File: file,
-                            })
-                          );
-                          setValue("");
-                          setFile("");
-                        }}
-                      >
-                        Обновить
-                      </button>
-                      <button
-                        className={styles.remove_button}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          dispatch(removeItem(Id));
-                        }}
-                      >
-                        Удалить
-                      </button>
+                            }} func={updateItem}/>
+                      <RemoveButton id={Id} func={removeItem} />
                     </section>
                   </form>
                 </Accordion.Body>
