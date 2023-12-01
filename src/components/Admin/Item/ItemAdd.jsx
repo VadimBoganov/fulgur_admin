@@ -6,17 +6,24 @@ import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
 import { addItem } from "../../../app/itemsSlice";
 import { fetchUsers } from "../../../app/usersSlice";
+import FileInput from "../Common/Inputs/FileInput";
+import StringInput from "../Common/Inputs/StringInput";
+import DropdownInput from "../Common/Inputs/DropdownInput";
+import NumberInput from "../Common/Inputs/NumberInput";
+import CheckboxInput from "../Common/Inputs/CheckboxInput";
+import AddButton from "../Common/Buttons/AddButton";
 
 const ItemAdd = () => {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState();
   const [value, setValue] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState();
+  const [isFullPrice, setIsFullPrice] = useState();
 
   useEffect(() => {
-    dispatch(fetchUsers())
-  },[dispatch])
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchProductItems());
@@ -26,72 +33,74 @@ const ItemAdd = () => {
 
   const [selectValue, setSelectValue] = useState("");
 
+  function validate() {
+    if (file === undefined) {
+      alert('File cannot be empty')
+      return false
+    }
+
+    if (value.length == 0){
+      alert('Name cannot be empty')
+      return false
+    }
+
+    if (price === undefined) {
+      alert('Price cannot be empty')
+      return false
+    }
+
+    return true
+  }
+
   return (
     <div className={styles.admin}>
       <Sidebar />
       <div className={styles.container}>
         <form className={styles.form}>
-          <label htmlFor="file">Изображение:</label>
-          <input
-            id="file"
-            type="file"
-            onChange={(e) => setFile(e.target.files[0])}
+          <FileInput
+            labelValue={"Изображение"}
+            item={{ ImageUrl: file }}
+            setValue={setFile}
           />
-          {file && <img src={URL.createObjectURL(file)} alt="file" />}
-          <label htmlFor="addItem">Название продукта:</label>
-          <select
-            id="addItem"
-            name="product items"
-            onChange={(e) => setSelectValue(e.target.value)}
-          >
-            {productItems.list &&
-              productItems.list.map(({ Id, Name }) => (
-                <option key={Id} value={Name}>
-                  {Name}
-                </option>
-              ))}
-          </select>
-          <label htmlFor="productName">Название:</label>
-          <input
-            id="productName"
-            type="text"
-            placeholder="Написать..."
-            autoComplete="off"
-            onChange={(e) => setValue(e.target.value)}
+          <DropdownInput
+            labelValue={"Название продукта"}
+            setValue={setSelectValue}
+            options={productItems.list}
           />
-          <label htmlFor="price">Цена (от):</label>
-          <input
-            id="price"
-            type="number"
-            placeholder="Ввести..."
-            min="0"
-            onChange={(e) => setPrice(e.target.value)}
+          <StringInput
+            value={value}
+            labelValue={"Название изделия"}
+            setValue={setValue}
           />
+          <div className={styles.price}>
+            <NumberInput
+              value={price}
+              labelValue={"Цена"}
+              setValue={setPrice}
+            />
+            <CheckboxInput
+              value={isFullPrice}
+              labelValue={"Выводить цену (от)"}
+              setValue={setIsFullPrice}
+            />
+          </div>
           <NavLink
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
             }
             to={`/admin/item`}
           >
-            <button
-              className={styles.button}
-              onClick={() => {
-                const productItem = productItems.list.filter(
-                  (item) => item.Name === selectValue || productItems.list[0]
-                )[0];
-
-                dispatch(
-                  addItem({
-                    ProductItemId: productItem.Id,
-                    Name: value,
-                    Price: price,
-                    File: file,
-                  })
-                );
-              }}
-            >
-              Добавить
-            </button>
+            <AddButton
+              data={{ProductItemId: productItems.list.filter(
+                (item) => item.Name === selectValue || productItems.list[0]
+              )[0]?.Id,
+                Name: value,
+                Price: price,
+                File: file,
+                IsFullPrice: isFullPrice}}
+              func={addItem}
+              validate={validate}                
+            />
           </NavLink>
         </form>
       </div>

@@ -7,6 +7,7 @@ const FileInput = ({item, setValue, labelValue}) => {
     labelValue: labelValue,
     setValue: setValue,
   });
+
   return (
     <>
       <label htmlFor={hashValue}>{labelValue}:</label>
@@ -15,11 +16,11 @@ const FileInput = ({item, setValue, labelValue}) => {
         type="file"
         onChange={(e) => setValue(e.target.files[0])}
       />
-      {item.ImageUrl && <img src={item.ImageUrl} alt="file" />}
-      {item.file && (
+      {item?.ImageUrl && <img src={typeof(item?.ImageUrl) === typeof("") ? item.ImageUrl : URL.createObjectURL(item.ImageUrl)} alt="file" />}
+      {item?.file && (
         <>
           <span style={{ margin: "auto" }}>Заменить на:</span>
-          <img src={URL.createObjectURL(item.file)} alt="file" />
+          <img src={URL.createObjectURL(item?.file)} alt="file" />
         </>
       )}
     </>
