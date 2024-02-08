@@ -6,30 +6,19 @@ import {
   updateProduct,
 } from "../../../app/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Sidebar from "../Sidebar";
 import { Accordion } from "react-bootstrap";
-import { fetchUsers } from "../../../app/usersSlice";
-import { fetchProductItems } from "../../../app/productItemsSlice";
 
 const Product = () => {
-  
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
-
-  const { list } = useSelector(({ products }) => products);
-
-  useEffect(() => {
-    dispatch(fetchUsers())
-  },[dispatch])
-
-  useEffect(() => {
-    dispatch(fetchProductItems());
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
+  const { list } = useSelector(({ products }) => products);
 
   return (
     <div className={styles.admin}>
@@ -44,17 +33,17 @@ const Product = () => {
         <button className={styles.add_button}>Добавить</button>
       </NavLink>
       <Accordion data-bs-theme="dark">
-        {list &&
-          list.map(({ Id, Name }) => (
-            <Accordion.Item key={Id} eventKey={Id}>
-              <Accordion.Header>{Name}</Accordion.Header>
+        {list && 
+          list.map(({ id, name }) => (
+            <Accordion.Item key={id} eventKey={id}>
+              <Accordion.Header>{name}</Accordion.Header>
               <Accordion.Body>
-                <form key={Id} className={styles.form}>
-                  <label htmlFor={Id}>Название:</label>
+                <form key={id} className={styles.form}>
+                  <label htmlFor={id}>Название:</label>
                   <input
-                    id={Id}
+                    id={id}
                     type="text"
-                    placeholder={Name}
+                    placeholder={name}
                     autoComplete="off"
                     onChange={(e) => setValue(e.target.value)}
                   />
@@ -64,7 +53,7 @@ const Product = () => {
                       onClick={(e) => {
                         e.preventDefault();
                         dispatch(
-                          updateProduct({ id: Id, name: value || Name })
+                          updateProduct({ id: id, name: value || name })
                         );
                         setValue("");
                       }}
@@ -75,7 +64,7 @@ const Product = () => {
                       className={styles.remove_button}
                       onClick={(e) => {
                         e.preventDefault();
-                        dispatch(removeProduct(Id));
+                        dispatch(removeProduct(id));
                       }}
                     >
                       Удалить

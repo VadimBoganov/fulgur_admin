@@ -10,7 +10,6 @@ import {
 import styles from "../Admin.module.scss";
 import { fetchProductTypes } from "../../../app/productTypesSlice";
 import { Accordion } from "react-bootstrap";
-import { fetchUsers } from "../../../app/usersSlice";
 
 const ProductSubtype = () => {
   const dispatch = useDispatch();
@@ -18,14 +17,7 @@ const ProductSubtype = () => {
   const [value, setValue] = useState("");
 
   useEffect(() => {
-    dispatch(fetchUsers())
-  },[dispatch])
-
-  useEffect(() => {
     dispatch(fetchProductTypes());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchProductSubtypes());
   }, [dispatch]);
 
@@ -47,29 +39,30 @@ const ProductSubtype = () => {
         </NavLink>
         <Accordion data-bs-theme="dark">
           {list &&
-            list.map(({ Id, ProductTypeId, Name }) => (
-              <Accordion.Item key={Id} eventKey={Id}>
-                <Accordion.Header>{Name}</Accordion.Header>
+            list.map(({ id, productTypeId, name }) => (
+              <Accordion.Item key={id} eventKey={id}>
+                <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>
-                  <form key={Id} className={styles.form}>
+                  <form key={id} className={styles.form}>
                     <label htmlFor="productSubtype">Название продукции:</label>
                     <select
                       id="productSubtype"
                       name="product sub types"
+                      defaultValue={prodTypes.list.filter(item => item.id === productTypeId)[0]?.name}
                       onChange={(e) => setSelectValue(e.target.value)}
                     >
                       {prodTypes.list &&
-                        prodTypes.list.map(({ Id, Name }) => (
-                          <option key={Id} value={Name} selected={Id === ProductTypeId}>
-                            {Name}
+                        prodTypes.list.map(({ id, name }) => (
+                          <option key={id} value={name}>
+                            {name}
                           </option>
                         ))}
                     </select>
-                    <label htmlFor={Id}>Название:</label>
+                    <label htmlFor={id}>Название:</label>
                     <input
-                      id={Id}
+                      id={id}
                       type="text"
-                      placeholder={Name}
+                      placeholder={name}
                       autoComplete="off"
                       onChange={(e) => setValue(e.target.value)}
                     />
@@ -82,13 +75,13 @@ const ProductSubtype = () => {
                             selectValue === null || selectValue === undefined
                               ? prodTypes.list[0]
                               : prodTypes.list.filter(
-                                  (item) => item.Name === selectValue
+                                  (item) => item.name === selectValue
                                 )[0];
                           dispatch(
                             updateProductSubtype({
-                              Id: Id,
-                              ProductTypeId: prodType.Id,
-                              Name: value || Name,
+                              Id: id,
+                              ProductTypeId: prodType.id,
+                              Name: value || name,
                             })
                           );
                           setValue("");
@@ -100,7 +93,7 @@ const ProductSubtype = () => {
                         className={styles.remove_button}
                         onClick={(e) => {
                           e.preventDefault();
-                          dispatch(removeProductSubtype(Id));
+                          dispatch(removeProductSubtype(id));
                         }}
                       >
                         Удалить

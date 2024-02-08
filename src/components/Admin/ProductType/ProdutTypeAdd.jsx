@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../Admin.module.scss";
 import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
 import { addProductType } from "../../../app/productTypesSlice";
-import { fetchUsers } from "../../../app/usersSlice";
 
 const ProdutTypeForm = () => {
   const dispatch = useDispatch();
   const { list } = useSelector(({ products }) => products);
   const [value, setValue] = useState("");
   const [selectValue, setSelectValue] = useState(list[0].Name);
-
-  useEffect(() => {
-    dispatch(fetchUsers())
-  },[dispatch])
 
   return (
     <div className={styles.admin}>
@@ -29,9 +24,9 @@ const ProdutTypeForm = () => {
             onChange={(e) => setSelectValue(e.target.value)}
           >
             {list &&
-              list.map(({ Id, Name }) => (
-                <option key={Id} value={Name}>
-                  {Name}
+              list.map(({ id, name }) => (
+                <option key={id} value={name}>
+                  {name}
                 </option>
               ))}
           </select>
@@ -53,8 +48,8 @@ const ProdutTypeForm = () => {
             <button
               className={styles.button}
               onClick={() => {
-                const prod = list.filter((item) => item.Name === selectValue)[0]
-                dispatch(addProductType({ProductId: prod.Id, Name: value }));
+                const prod = list.filter((item) => item.name === selectValue)[0]
+                dispatch(addProductType({productId: prod.id, name: value }));
                 setValue("");
               }}
             >

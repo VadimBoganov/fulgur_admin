@@ -5,17 +5,12 @@ import Sidebar from "../Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductSubtypes } from "../../../app/productSubtypeSlice";
 import { addProductItem } from "../../../app/productItemsSlice";
-import { fetchUsers } from "../../../app/usersSlice";
 
 const ProductItemAdd = () => {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState();
   const [value, setValue] = useState("");
-
-  useEffect(() => {
-    dispatch(fetchUsers())
-  },[dispatch])
 
   useEffect(() => {
     dispatch(fetchProductSubtypes());
@@ -44,9 +39,9 @@ const ProductItemAdd = () => {
             onChange={(e) => setSelectValue(e.target.value)}
           >
             {prodSubTypes.list &&
-              prodSubTypes.list.map(({ Id, Name }) => (
-                <option key={Id} value={Name}>
-                  {Name}
+              prodSubTypes.list.map(({ id, name }) => (
+                <option key={id} value={name}>
+                  {name}
                 </option>
               ))}
           </select>
@@ -67,10 +62,10 @@ const ProductItemAdd = () => {
             <button
               className={styles.button}
               onClick={() => {                
-                const prodSubType = prodSubTypes.list.filter((item) => item.Name === selectValue || prodSubTypes.list[0])[0];
+                const prodSubType = prodSubTypes.list.filter((item) => item.name === selectValue || prodSubTypes.list[0])[0];
                 
                 dispatch(
-                  addProductItem({ProductSubTypeId: prodSubType.Id, Name: value, File: file})
+                  addProductItem({ProductSubTypeId: prodSubType.id, Name: value, File: file})
                 );
               }}
             >

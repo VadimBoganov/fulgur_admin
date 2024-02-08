@@ -1,15 +1,16 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styles from "./Sidebar.module.scss";
-import axios from "axios";
 
 const Sidebar = () => {
 
+  const token = sessionStorage.getItem("access_token")
+  if (token == null) window.location.href="/admin"
+
   const logout = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:8000/api/logout', {}, {withCredentials: true})
+    sessionStorage.clear();    
     window.location.href="/admin";
-    return false;
   }
 
   return (

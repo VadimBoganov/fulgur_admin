@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {useState} from 'react';
 import styles from "../Admin/Admin.module.scss";
 import { useNavigate } from "react-router-dom";
+import config from "../../config/config.json"
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -14,7 +15,9 @@ const Login = () => {
         e.preventDefault();
 
         try{
-            await axios.post('http://localhost:8000/api/login', {email: email, password: password}, {withCredentials: true})
+            const resp = await axios.post(`${config.protocol}${config.host}${config.port}/api/auth`, {email: email, password: password}, {withCredentials: true})
+            const data = resp.data
+            sessionStorage.setItem("access_token", data.access_token)
         }
         catch(err){
             setError(err.response.data)

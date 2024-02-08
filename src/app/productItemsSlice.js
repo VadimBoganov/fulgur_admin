@@ -2,9 +2,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios";
 import config from "../config/config.json"
 
+const url = `${config.protocol}${config.host}${config.port}/api/productitems`
+const token = sessionStorage.getItem("access_token")
+const headers = {"Authorization": "Bearer " + token, "Content-Type": "multipart/form-data" }
+
 export const fetchProductItems = createAsyncThunk('fetchProductitems', async(_, thunkApi) => {
     try{
-        const resp = await axios.get(config.productItemsUrl)
+        const resp = await axios.get(url, {headers:headers})
         return resp.data;
     }catch(err){
         console.log(err);
@@ -14,7 +18,7 @@ export const fetchProductItems = createAsyncThunk('fetchProductitems', async(_, 
 
 export const addProductItem = createAsyncThunk('addProductItem', async(data, thunkApi) => {
     try{ 
-        const resp = await axios.post(config.productItemsUrl, data, { headers: {'Content-Type': 'multipart/form-data'}});
+        const resp = await axios.post(url, data, { headers: headers});
         return resp.data;
     }catch(err){
         console.log(err);
@@ -24,7 +28,8 @@ export const addProductItem = createAsyncThunk('addProductItem', async(data, thu
 
 export const updateProductItem = createAsyncThunk('updateProductItem', async(data, thunkApi) => {
     try{ 
-        const resp = await axios.put(config.productItemsUrl, data, { headers: {'Content-Type': 'multipart/form-data'}});
+        console.log(data)
+        const resp = await axios.put(url, data, {headers: headers});
         return resp.data;
     }catch(err){
         console.log(err);
@@ -34,7 +39,7 @@ export const updateProductItem = createAsyncThunk('updateProductItem', async(dat
 
 export const removeProductItem = createAsyncThunk('removeProductItem', async(id, thunkApi) => {
     try{
-        const resp = await axios.delete(`${config.productItemsUrl}/${id}`);
+        const resp = await axios.delete(`${url}/${id}`, {headers: headers});
         return resp.data
     }
     catch(err){
@@ -53,17 +58,17 @@ const productItemsSlice = createSlice({
             state.list = payload; 
         })
         builder.addCase(removeProductItem.fulfilled, (state, {payload}) => {
-            state.list = state.list.filter((item) => item.Id !== payload)
+            state.list = state.list.filter((item) => item.id !== payload.id)
         })
         builder.addCase(addProductItem.fulfilled, (state, {payload}) => {
             state.list = state.list || []
             state.list.push(payload)
         })
         builder.addCase(updateProductItem.fulfilled, (state, {payload}) => {
-            const ind = state.list.findIndex(o => o.Id === payload.Id)
-            state.list[ind].Name = payload.Name
-            state.list[ind].ImageUrl = payload.ImageUrl
-            state.list[ind].ProductSubTypeId = payload.ProductSubTypeId
+            const ind = state.list.findIndex(o => o.id === payload.id)
+            state.list[ind].name = payload.name
+            state.list[ind].imageUrl = payload.imageUrl
+            state.list[ind].productSubTypeId = payload.productSubTypeId
         })
     }
 })

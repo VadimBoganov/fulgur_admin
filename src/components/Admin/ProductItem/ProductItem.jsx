@@ -10,7 +10,6 @@ import {
   updateProductItem,
 } from "../../../app/productItemsSlice";
 import { Accordion } from "react-bootstrap";
-import { fetchUsers } from "../../../app/usersSlice";
 
 const ProductItem = () => {
   const dispatch = useDispatch();
@@ -21,14 +20,7 @@ const ProductItem = () => {
   const prodSubTypes = useSelector(({ productsubtypes }) => productsubtypes);
 
   useEffect(() => {
-    dispatch(fetchUsers())
-  },[dispatch])
-
-  useEffect(() => {
     dispatch(fetchProductSubtypes());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchProductItems());
   }, [dispatch]);
 
@@ -50,18 +42,18 @@ const ProductItem = () => {
         </NavLink>
         <Accordion data-bs-theme="dark">
           {list &&
-            list.map(({ Id, ProductSubTypeId, Name, ImageUrl }) => (
-              <Accordion.Item key={Id} eventKey={Id}>
-                <Accordion.Header>{Name}</Accordion.Header>
+            list.map(({ id, productSubTypeId, name, imageUrl }) => (
+              <Accordion.Item key={id} eventKey={id}>
+                <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>
-                  <form key={Id} className={styles.form}>
+                  <form key={id} className={styles.form}>
                     <label htmlFor="file">Изображение:</label>
                     <input
                       id="file"
                       type="file"
                       onChange={(e) => setFile(e.target.files[0])}
                     />
-                    {ImageUrl && <img src={ImageUrl} alt="file" />}
+                    {imageUrl && <img src={imageUrl} alt="file" />}
                     {file && (
                       <>
                         <span style={{ margin: "auto" }}>Заменить на:</span>
@@ -72,12 +64,13 @@ const ProductItem = () => {
                     <select
                       id="addItem"
                       name="product items"
+                      defaultValue={prodSubTypes.list.filter(item => item.id === productSubTypeId)[0]?.name}
                       onChange={(e) => setSelectValue(e.target.value)}
                     >
                       {prodSubTypes.list &&
-                        prodSubTypes.list.map(({ Id, Name }) => (
-                          <option key={Id} value={Name} selected={Id === ProductSubTypeId}>
-                            {Name}
+                        prodSubTypes.list.map(({ id, name }) => (
+                          <option key={id} value={name}>
+                            {name}
                           </option>
                         ))}
                     </select>
@@ -85,7 +78,7 @@ const ProductItem = () => {
                     <input
                       id="productItemName"
                       type="text"
-                      placeholder={Name}
+                      placeholder={name}
                       autoComplete="off"
                       onChange={(e) => setValue(e.target.value)}
                     />
@@ -98,14 +91,13 @@ const ProductItem = () => {
                             selectValue === null || selectValue === undefined
                               ? prodSubTypes.list[0]
                               : prodSubTypes.list.filter(
-                                  (item) => item.Name === selectValue
+                                  (item) => item.name === selectValue
                                 )[0];
-                          const name = value ? value : Name;
                           dispatch(
                             updateProductItem({
-                              Id: Id,
-                              ProductSubTypeId: prodSubType.Id,
-                              Name: name,
+                              Id: id,
+                              ProductSubTypeId: prodSubType.id,
+                              Name: value || name,
                               File: file,
                             })
                           );
@@ -119,7 +111,7 @@ const ProductItem = () => {
                         className={styles.remove_button}
                         onClick={(e) => {
                           e.preventDefault();
-                          dispatch(removeProductItem(Id));
+                          dispatch(removeProductItem(id));
                         }}
                       >
                         Удалить
