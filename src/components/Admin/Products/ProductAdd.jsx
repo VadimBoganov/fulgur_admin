@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { addProduct } from "../../../app/productsSlice";
-import { useDispatch } from "react-redux";
 import styles from "../Admin.module.scss";
 import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
+import AddButton from "../Common/Buttons/AddButton";
 
 const ProductAdd = () => {
-  const dispatch = useDispatch();
   const [value, setValue] = useState("");
+
+  function validate() {
+    if (value.length === 0){
+      alert('Имя не может быть пустым.')
+      return false
+    }
+
+    return true
+  }
 
   return (
     <div className={styles.admin}>
@@ -30,15 +38,11 @@ const ProductAdd = () => {
             }
             to={`/admin/product`}
           >
-            <button
-              className={styles.button}
-              onClick={() => {
-                dispatch(addProduct({ Name: value }));
-                setValue("");
-              }}
-            >
-              Добавить
-            </button>
+            <AddButton
+            data={{Name: value}}
+            func={addProduct}
+            validate={validate}
+            />
           </NavLink>
         </form>
       </div>

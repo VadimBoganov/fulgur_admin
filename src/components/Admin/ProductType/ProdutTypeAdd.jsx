@@ -1,15 +1,24 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styles from "../Admin.module.scss";
 import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
 import { addProductType } from "../../../app/productTypesSlice";
+import AddButton from "../Common/Buttons/AddButton";
 
 const ProdutTypeForm = () => {
-  const dispatch = useDispatch();
   const { list } = useSelector(({ products }) => products);
   const [value, setValue] = useState("");
   const [selectValue, setSelectValue] = useState(list[0].Name);
+
+  function validate() {
+    if (value.length === 0){
+      alert('Имя не может быть пустым.')
+      return false
+    }
+
+    return true
+  }
 
   return (
     <div className={styles.admin}>
@@ -45,16 +54,12 @@ const ProdutTypeForm = () => {
             }
             to={`/admin/producttype`}
           >
-            <button
-              className={styles.button}
-              onClick={() => {
-                const prod = list.filter((item) => item.name === selectValue)[0]
-                dispatch(addProductType({productId: prod.id, name: value }));
-                setValue("");
-              }}
-            >
-              Добавить
-            </button>
+            <AddButton
+              data={{productId: list.filter((item) => item.name === selectValue)[0]?.id,
+                name: value}}
+                func={addProductType}
+                validate={validate}
+            />
           </NavLink>
         </form>
       </div>

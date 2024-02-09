@@ -2,15 +2,14 @@ import React from "react";
 import styles from '../../Admin.module.scss'
 import { useDispatch } from "react-redux";
 
-const AddButton = ({data, func, validate}) => {
+const AddButton = ({ data, func, validate }) => {
   const dispatch = useDispatch();
 
   return (
     <button
       className={styles.button}
-      onClick={(e) => {
-        e.preventDefault();
-        validate() && dispatch(func(data));
+      onClick={(e) => { 
+        validate() ? dispatch(func(data)) : e.preventDefault()
       }}
     >
       Добавить

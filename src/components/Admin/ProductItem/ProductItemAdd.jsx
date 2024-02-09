@@ -5,6 +5,7 @@ import Sidebar from "../Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductSubtypes } from "../../../app/productSubtypeSlice";
 import { addProductItem } from "../../../app/productItemsSlice";
+import AddButton from "../Common/Buttons/AddButton";
 
 const ProductItemAdd = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,20 @@ const ProductItemAdd = () => {
   const prodSubTypes = useSelector(({ productsubtypes }) => productsubtypes);
 
   const [selectValue, setSelectValue] = useState("");
+
+  function validate() {
+    if (file === undefined) {
+      alert('Файл не добавлен.')
+      return false
+    }
+
+    if (value.length === 0){
+      alert('Имя не может быть пустым.')
+      return false
+    }
+
+    return true
+  }
 
   return (
     <div className={styles.admin}>
@@ -59,18 +74,14 @@ const ProductItemAdd = () => {
             }
             to={`/admin/productitem`}
           >
-            <button
-              className={styles.button}
-              onClick={() => {                
-                const prodSubType = prodSubTypes.list.filter((item) => item.name === selectValue || prodSubTypes.list[0])[0];
-                
-                dispatch(
-                  addProductItem({ProductSubTypeId: prodSubType.id, Name: value, File: file})
-                );
+            <AddButton
+              data={{ProductSubTypeId: selectValue === null ? prodSubTypes.list[0]?.id : prodSubTypes.list.filter((item) => item.name === selectValue)[0]?.id,
+                Name: value,
+                File: file,
               }}
-            >
-              Добавить
-            </button>
+              func={addProductItem}
+              validate={validate}
+            />
           </NavLink>
         </form>
       </div>

@@ -85,7 +85,7 @@ const ItemAdd = () => {
             to={`/admin/item`}
           >
             <AddButton
-              data={{ProductItemId: selectValue === null ? productItems.list[0]?.id : productItems.list.filter((item) => item.name === selectValue)[0]?.Id,
+              data={{ProductItemId: selectValue === null ? productItems.list[0]?.id : productItems.list.filter((item) => item.name === selectValue)[0]?.id,
                 Name: value,
                 Price: price,
                 File: file,
