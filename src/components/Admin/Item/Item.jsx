@@ -6,7 +6,6 @@ import { NavLink } from "react-router-dom";
 import { fetchProductItems } from "../../../app/productItemsSlice";
 import { fetchItems, removeItem, updateItem } from "../../../app/itemsSlice";
 import { Accordion } from "react-bootstrap";
-import { fetchUsers } from "../../../app/usersSlice";
 import CheckboxInput from "../Common/Inputs/CheckboxInput";
 import DropdownInput from "../Common/Inputs/DropdownInput";
 import FileInput from "../Common/Inputs/FileInput";
@@ -18,20 +17,13 @@ import UpdateButton from "../Common/Buttons/UpdateButton";
 const Item = () => {
   const dispatch = useDispatch();
 
-  const [file, setFile] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [isFullPrice, setIsFullPrice] = useState();
-
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+  const [_file, setFile] = useState("");
+  const [_name, setName] = useState("");
+  const [_price, setPrice] = useState(0);
+  const [_isFullPrice, setIsFullPrice] = useState();
 
   useEffect(() => {
     dispatch(fetchProductItems());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchItems());
   }, [dispatch]);
 
@@ -41,9 +33,9 @@ const Item = () => {
   const items = useSelector(({ items }) => items);
 
   const groups = items.list.reduce(
-    (item, { Id, ProductItemId, Name, Price, IsFullPrice }) => {
-      if (!item[ProductItemId]) item[ProductItemId] = [];
-      item[ProductItemId].push({ Id, ProductItemId, Name, Price, IsFullPrice });
+    (item, { id, productItemId, name, price, isFullPrice }) => {
+      if (!item[productItemId]) item[productItemId] = [];
+      item[productItemId].push({ id, productItemId, name, price, isFullPrice });
       return item;
     },
     {}
@@ -69,47 +61,47 @@ const Item = () => {
                   <h3 key={index} className={styles.group}>
                     {
                       productItems.list.filter(
-                        (pi) => pi.Id === parseInt(group[0])
-                      )[0]?.Name
+                        (pi) => pi.id === parseInt(group[0])
+                      )[0]?.name
                     }
                   </h3>
                   {group[1].map(
                     (
-                      { Id, ProductItemId, Name, Price, IsFullPrice },
+                      { id, productItemId, name, price, isFullPrice },
                       index
                     ) => (
-                      <Accordion.Item key={Id} eventKey={Id}>
-                        <Accordion.Header>{Name}</Accordion.Header>
+                      <Accordion.Item key={id} eventKey={id}>
+                        <Accordion.Header>{name}</Accordion.Header>
                         <Accordion.Body>
-                          <form key={Id} className={styles.form}>
+                          <form key={id} className={styles.form}>
                             <FileInput
-                              item={items.list[index]}
+                              item={{imageUrl: items.list[index].imageUrl, file: _file}}
                               labelValue={"Изображение"}
                               setValue={setFile}
                             />
                             <DropdownInput
-                              id={Id}
-                              value={ProductItemId}
+                              id={id}
+                              value={productItemId}
                               labelValue={"Название продукта"}
                               setValue={setSelectValue}
                               options={productItems.list}
                             />
                             <StringInput
-                              id={Id}
-                              value={Name}
+                              id={id}
+                              value={name}
                               labelValue={"Название изделия"}
                               setValue={setName}
                             />
                             <div className={styles.price}>
                               <NumberInput
-                                id={Id}
-                                value={Price}
+                                id={id}
+                                value={price}
                                 labelValue={"Цена"}
                                 setValue={setPrice}
                               />
                               <CheckboxInput
-                                id={Id}
-                                value={IsFullPrice}
+                                id={id}
+                                value={isFullPrice}
                                 labelValue={"Выводить цену (от)"}
                                 setValue={setIsFullPrice}
                               />
@@ -117,23 +109,23 @@ const Item = () => {
                             <section>
                               <UpdateButton
                                 data={{
-                                  Id: Id,
+                                  Id: id,
                                   ProductItemId: selectValue
                                     ? productItems.list.filter(
-                                        (pi) => pi.Name === selectValue
-                                      )[0]?.Id
-                                    : ProductItemId,
-                                  Name: name || Name,
-                                  Price: price || Price,
+                                        (pi) => pi.name === selectValue
+                                      )[0]?.id
+                                    : productItemId,
+                                  Name: _name || name,
+                                  Price: _price || price,
                                   IsFullPrice:
-                                    isFullPrice === undefined
-                                      ? IsFullPrice
-                                      : isFullPrice,
-                                  File: file,
+                                    _isFullPrice === undefined
+                                      ? isFullPrice
+                                      : _isFullPrice,
+                                  File: _file,
                                 }}
                                 func={updateItem}
                               />
-                              <RemoveButton id={Id} func={removeItem} />
+                              <RemoveButton id={id} func={removeItem} />
                             </section>
                           </form>
                         </Accordion.Body>

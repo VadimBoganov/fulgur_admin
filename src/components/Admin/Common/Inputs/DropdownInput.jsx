@@ -15,13 +15,13 @@ const DropdownInput = ({id, value, setValue, labelValue, options }) => {
       <label htmlFor={hashValue}>{labelValue}:</label>
       <select
         id={hashValue}
-        defaultValue={options.filter((o) => o.Id === value)[0]?.Name}
+        defaultValue={options.filter((o) => o.id === value)[0]?.name}
         onChange={(e) => setValue(e.target.value)}
       >
         {options &&
-          options.map(({ Id, Name }) => (
-            <option key={Id} value={Name}>
-              {Name}
+          options.map(({ id, name }) => (
+            <option key={id} value={name}>
+              {name}
             </option>
           ))}
       </select>

@@ -5,7 +5,6 @@ import { fetchProductItems } from "../../../app/productItemsSlice";
 import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
 import { addItem } from "../../../app/itemsSlice";
-import { fetchUsers } from "../../../app/usersSlice";
 import FileInput from "../Common/Inputs/FileInput";
 import StringInput from "../Common/Inputs/StringInput";
 import DropdownInput from "../Common/Inputs/DropdownInput";
@@ -22,16 +21,12 @@ const ItemAdd = () => {
   const [isFullPrice, setIsFullPrice] = useState();
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchProductItems());
   }, [dispatch]);
 
   const productItems = useSelector(({ productitems }) => productitems);
 
-  const [selectValue, setSelectValue] = useState("");
+  const [selectValue, setSelectValue] = useState(null);
 
   function validate() {
     if (file === undefined) {
@@ -39,7 +34,7 @@ const ItemAdd = () => {
       return false
     }
 
-    if (value.length == 0){
+    if (value.length === 0){
       alert('Name cannot be empty')
       return false
     }
@@ -59,7 +54,6 @@ const ItemAdd = () => {
         <form className={styles.form}>
           <FileInput
             labelValue={"Изображение"}
-            item={{ ImageUrl: file }}
             setValue={setFile}
           />
           <DropdownInput
@@ -91,9 +85,7 @@ const ItemAdd = () => {
             to={`/admin/item`}
           >
             <AddButton
-              data={{ProductItemId: productItems.list.filter(
-                (item) => item.Name === selectValue || productItems.list[0]
-              )[0]?.Id,
+              data={{ProductItemId: selectValue === null ? productItems.list[0]?.id : productItems.list.filter((item) => item.name === selectValue)[0]?.Id,
                 Name: value,
                 Price: price,
                 File: file,

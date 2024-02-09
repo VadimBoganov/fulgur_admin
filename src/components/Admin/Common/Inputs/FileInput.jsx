@@ -16,7 +16,7 @@ const FileInput = ({item, setValue, labelValue}) => {
         type="file"
         onChange={(e) => setValue(e.target.files[0])}
       />
-      {item?.ImageUrl && <img src={typeof(item?.ImageUrl) === typeof("") ? item.ImageUrl : URL.createObjectURL(item.ImageUrl)} alt="file" />}
+      {item?.imageUrl && <img src={typeof(item?.imageUrl) === typeof("") ? item.imageUrl : URL.createObjectURL(item.imageUrl)} alt="file" />}
       {item?.file && (
         <>
           <span style={{ margin: "auto" }}>Заменить на:</span>
