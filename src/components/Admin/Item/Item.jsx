@@ -32,6 +32,8 @@ const Item = () => {
   const productItems = useSelector(({ productitems }) => productitems);
   const items = useSelector(({ items }) => items);
 
+  console.log(items)
+
   const groups = items.list.reduce(
     (item, { id, productItemId, name, price, isFullPrice }) => {
       if (!item[productItemId]) item[productItemId] = [];
@@ -40,7 +42,7 @@ const Item = () => {
     },
     {}
   );
-
+  
   return (
     <div className={styles.admin}>
       <Sidebar />
@@ -78,6 +80,7 @@ const Item = () => {
                               item={{imageUrl: items.list[index].imageUrl, file: _file}}
                               labelValue={"Изображение"}
                               setValue={setFile}
+                              isUpdate={true}
                             />
                             <DropdownInput
                               id={id}
@@ -124,6 +127,7 @@ const Item = () => {
                                   File: _file,
                                 }}
                                 func={updateItem}
+                                setFile={setFile}
                               />
                               <RemoveButton id={id} func={removeItem} />
                             </section>

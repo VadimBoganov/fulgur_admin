@@ -3,11 +3,12 @@ import axios from "axios";
 import config from "../config/config.json"
 
 const url = `${config.protocol}${config.host}${config.port}/api/producttypes`
-const token = sessionStorage.getItem("access_token")
-const headers = {"Authorization": "Bearer " + token }
+let headers = {}
 
 export const fetchProductTypes = createAsyncThunk('fetchProductTypes', async (_, thunkApi) => {
     try{
+        const token = sessionStorage.getItem("access_token")
+        headers = {"Authorization": "Bearer " + token }
         const resp = await axios(url, {headers: headers});
         return resp.data;
     }catch(err){

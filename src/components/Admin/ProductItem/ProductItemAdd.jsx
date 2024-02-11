@@ -19,8 +19,7 @@ const ProductItemAdd = () => {
 
   const prodSubTypes = useSelector(({ productsubtypes }) => productsubtypes);
 
-  const [selectValue, setSelectValue] = useState("");
-
+  const [selectValue, setSelectValue] = useState(prodSubTypes.list[0]?.name);
   function validate() {
     if (file === undefined) {
       alert('Файл не добавлен.')
@@ -75,7 +74,7 @@ const ProductItemAdd = () => {
             to={`/admin/productitem`}
           >
             <AddButton
-              data={{ProductSubTypeId: selectValue === null ? prodSubTypes.list[0]?.id : prodSubTypes.list.filter((item) => item.name === selectValue)[0]?.id,
+              data={{ProductSubTypeId: prodSubTypes.list.filter((item) => item.name === selectValue)[0]?.id,
                 Name: value,
                 File: file,
               }}

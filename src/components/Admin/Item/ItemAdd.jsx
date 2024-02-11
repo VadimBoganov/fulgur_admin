@@ -55,6 +55,8 @@ const ItemAdd = () => {
           <FileInput
             labelValue={"Изображение"}
             setValue={setFile}
+            item={{file:file}}
+            isUpdate={false}
           />
           <DropdownInput
             labelValue={"Название продукта"}
@@ -85,7 +87,7 @@ const ItemAdd = () => {
             to={`/admin/item`}
           >
             <AddButton
-              data={{ProductItemId: selectValue === null ? productItems.list[0]?.id : productItems.list.filter((item) => item.name === selectValue)[0]?.id,
+              data={{ProductItemId: productItems.list.filter((item) => item.name === selectValue)[0]?.id,
                 Name: value,
                 Price: price,
                 File: file,

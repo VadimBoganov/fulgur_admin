@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../../Admin.module.scss";
 import { useDispatch } from "react-redux";
 
-const UpdateButton = ({data, func}) => {
+const UpdateButton = ({data, func, setFile}) => {
   const dispatch = useDispatch();
 
   return (
@@ -11,6 +11,7 @@ const UpdateButton = ({data, func}) => {
       onClick={(e) => {
         e.preventDefault();
         dispatch(func(data));
+        setFile(null)
       }}
     >
       Обновить
