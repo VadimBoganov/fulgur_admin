@@ -10,12 +10,14 @@ import {
   updateProductItem,
 } from "../../../app/productItemsSlice";
 import { Accordion } from "react-bootstrap";
+import StringInput from "../Common/Inputs/StringInput";
 
 const ProductItem = () => {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState("");
-  const [value, setValue] = useState("");
+  const [_name, setName] = useState("");
+  const [_link, setLink] = useState();
 
   const prodSubTypes = useSelector(({ productsubtypes }) => productsubtypes);
 
@@ -42,7 +44,7 @@ const ProductItem = () => {
         </NavLink>
         <Accordion data-bs-theme="dark">
           {list &&
-            list.map(({ id, productSubTypeId, name, imageUrl }) => (
+            list.map(({ id, productSubTypeId, name, imageUrl, link }) => (
               <Accordion.Item key={id} eventKey={id}>
                 <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>
@@ -80,7 +82,13 @@ const ProductItem = () => {
                       type="text"
                       placeholder={name}
                       autoComplete="off"
-                      onChange={(e) => setValue(e.target.value)}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                    <StringInput
+                      id={id}
+                      value={link}
+                      labelValue={"Ссылка"}
+                      setValue={setLink}
                     />
                     <section>
                       <button
@@ -91,17 +99,18 @@ const ProductItem = () => {
                             selectValue === null || selectValue === undefined
                               ? prodSubTypes.list[0]
                               : prodSubTypes.list.filter(
-                                  (item) => item.name === selectValue
-                                )[0];
+                                (item) => item.name === selectValue
+                              )[0];
                           dispatch(
                             updateProductItem({
                               Id: id,
                               ProductSubTypeId: prodSubType.id,
-                              Name: value || name,
+                              Name: _name || name,
                               File: file,
+                              Link: _link || link,
                             })
                           );
-                          setValue("");
+                          setName("");
                           setFile(null);
                         }}
                       >
@@ -116,7 +125,9 @@ const ProductItem = () => {
                       >
                         Удалить
                       </button>
+
                     </section>
+
                   </form>
                 </Accordion.Body>
               </Accordion.Item>

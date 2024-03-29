@@ -4,13 +4,20 @@ import styles from "../Admin.module.scss";
 import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
 import AddButton from "../Common/Buttons/AddButton";
+import StringInput from "../Common/Inputs/StringInput";
 
 const ProductAdd = () => {
   const [value, setValue] = useState("");
+  const [link, setLink] = useState()
 
   function validate() {
-    if (value.length === 0){
+    if (value.length === 0) {
       alert('Имя не может быть пустым.')
+      return false
+    }
+
+    if (link.length === 0) {
+      alert('Ссылка не может быть пустой.')
       return false
     }
 
@@ -32,6 +39,11 @@ const ProductAdd = () => {
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
+          <StringInput
+            value={link}
+            labelValue={"Ссылка"}
+            setValue={setLink}
+          />
           <NavLink
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
@@ -39,9 +51,9 @@ const ProductAdd = () => {
             to={`/admin/product`}
           >
             <AddButton
-            data={{Name: value}}
-            func={addProduct}
-            validate={validate}
+              data={{ Name: value, Link: link }}
+              func={addProduct}
+              validate={validate}
             />
           </NavLink>
         </form>

@@ -10,11 +10,13 @@ import {
 } from "../../../app/productTypesSlice";
 import { fetchProducts } from "../../../app/productsSlice";
 import { Accordion } from "react-bootstrap";
+import StringInput from "../Common/Inputs/StringInput";
 
 const ProductType = () => {
   const dispatch = useDispatch();
   const prods = useSelector(({ products }) => products);
   const [value, setValue] = useState("");
+  const [_link, setLink] = useState()
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -39,7 +41,7 @@ const ProductType = () => {
         </NavLink>
         <Accordion data-bs-theme="dark">
           {list &&
-            list.map(({ id, productId, name }) => (
+            list.map(({ id, productId, name, link }) => (
               <Accordion.Item key={id} eventKey={id}>
                 <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>
@@ -66,6 +68,12 @@ const ProductType = () => {
                       autoComplete="off"
                       onChange={(e) => setValue(e.target.value)}
                     />
+                    <StringInput
+                      id={id}
+                      value={link}
+                      labelValue={"Ссылка"}
+                      setValue={setLink}
+                    />
                     <section>
                       <button
                         className={styles.button}
@@ -82,6 +90,7 @@ const ProductType = () => {
                               Id: id,
                               ProductId: prod.id,
                               Name: value || name,
+                              Link: _link || link
                             })
                           );
                           setValue("");

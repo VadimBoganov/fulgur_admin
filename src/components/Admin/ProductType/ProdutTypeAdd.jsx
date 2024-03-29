@@ -5,18 +5,24 @@ import Sidebar from "../Sidebar";
 import { NavLink } from "react-router-dom";
 import { addProductType } from "../../../app/productTypesSlice";
 import AddButton from "../Common/Buttons/AddButton";
+import StringInput from "../Common/Inputs/StringInput";
 
 const ProdutTypeForm = () => {
   const { list } = useSelector(({ products }) => products);
   const [value, setValue] = useState("");
   const [selectValue, setSelectValue] = useState(list[0].Name);
+  const [link, setLink] = useState()
 
   function validate() {
-    if (value.length === 0){
+    if (value.length === 0) {
       alert('Имя не может быть пустым.')
       return false
     }
 
+    if (value.length === 0) {
+      alert('Ссылка не может быть пустой.')
+      return false
+    }
     return true
   }
 
@@ -48,6 +54,11 @@ const ProdutTypeForm = () => {
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
+          <StringInput
+            value={link}
+            labelValue={"Ссылка"}
+            setValue={setLink}
+          />
           <NavLink
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
@@ -55,10 +66,13 @@ const ProdutTypeForm = () => {
             to={`/admin/producttype`}
           >
             <AddButton
-              data={{productId: list.filter((item) => item.name === selectValue)[0]?.id,
-                name: value}}
-                func={addProductType}
-                validate={validate}
+              data={{
+                productId: list.filter((item) => item.name === selectValue)[0]?.id,
+                name: value,
+                link: link
+              }}
+              func={addProductType}
+              validate={validate}
             />
           </NavLink>
         </form>

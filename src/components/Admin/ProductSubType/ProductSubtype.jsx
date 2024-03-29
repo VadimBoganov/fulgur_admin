@@ -10,11 +10,13 @@ import {
 import styles from "../Admin.module.scss";
 import { fetchProductTypes } from "../../../app/productTypesSlice";
 import { Accordion } from "react-bootstrap";
+import StringInput from "../Common/Inputs/StringInput";
 
 const ProductSubtype = () => {
   const dispatch = useDispatch();
   const prodTypes = useSelector(({ producttypes }) => producttypes);
   const [value, setValue] = useState("");
+  const [_link, setLink] = useState()
 
   useEffect(() => {
     dispatch(fetchProductTypes());
@@ -39,7 +41,7 @@ const ProductSubtype = () => {
         </NavLink>
         <Accordion data-bs-theme="dark">
           {list &&
-            list.map(({ id, productTypeId, name }) => (
+            list.map(({ id, productTypeId, name, link }) => (
               <Accordion.Item key={id} eventKey={id}>
                 <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>
@@ -66,6 +68,12 @@ const ProductSubtype = () => {
                       autoComplete="off"
                       onChange={(e) => setValue(e.target.value)}
                     />
+                    <StringInput
+                      id={id}
+                      value={link}
+                      labelValue={"Ссылка"}
+                      setValue={setLink}
+                    />
                     <section>
                       <button
                         className={styles.button}
@@ -75,13 +83,14 @@ const ProductSubtype = () => {
                             selectValue === null || selectValue === undefined
                               ? prodTypes.list[0]
                               : prodTypes.list.filter(
-                                  (item) => item.name === selectValue
-                                )[0];
+                                (item) => item.name === selectValue
+                              )[0];
                           dispatch(
                             updateProductSubtype({
                               Id: id,
                               ProductTypeId: prodType.id,
                               Name: value || name,
+                              Link: _link || link
                             })
                           );
                           setValue("");

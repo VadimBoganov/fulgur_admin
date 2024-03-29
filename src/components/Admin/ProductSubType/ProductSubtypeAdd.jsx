@@ -3,22 +3,28 @@ import { useSelector } from 'react-redux'
 import Sidebar from '../Sidebar'
 import { NavLink } from 'react-router-dom'
 import styles from "../Admin.module.scss";
-import {addProductSubtype} from '../../../app/productSubtypeSlice'
+import { addProductSubtype } from '../../../app/productSubtypeSlice'
 import AddButton from '../Common/Buttons/AddButton';
+import StringInput from '../Common/Inputs/StringInput';
 
 const ProductSubtypeAdd = () => {
-    const {list} = useSelector(({producttypes}) => producttypes)
-    const [value, setValue] = useState('')
-    const [selectValue, setSelectValue] = useState(list[0].Name)
+  const { list } = useSelector(({ producttypes }) => producttypes)
+  const [value, setValue] = useState('')
+  const [link, setLink] = useState()
+  const [selectValue, setSelectValue] = useState(list[0].Name)
 
-    function validate() {
-      if (value.length === 0){
-        alert('Имя не может быть пустым.')
-        return false
-      }
-  
-      return true
+  function validate() {
+    if (value.length === 0) {
+      alert('Имя не может быть пустым.')
+      return false
     }
+    if (link.length === 0) {
+      alert('Ссылка не может быть пустой.')
+      return false
+    }
+
+    return true
+  }
 
   return (
     <div className={styles.admin}>
@@ -38,6 +44,7 @@ const ProductSubtypeAdd = () => {
                   {name}
                 </option>
               ))}
+
           </select>
           <label htmlFor="productSubtypeName">Название:</label>
           <input
@@ -48,6 +55,11 @@ const ProductSubtypeAdd = () => {
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
+          <StringInput
+            value={link}
+            labelValue={"Ссылка"}
+            setValue={setLink}
+          />
           <NavLink
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
@@ -55,8 +67,11 @@ const ProductSubtypeAdd = () => {
             to={`/admin/productsubtype`}
           >
             <AddButton
-              data={{ProductTypeId: list.filter((item) => item.name === selectValue)[0]?.id,
-              Name: value}}
+              data={{
+                ProductTypeId: list.filter((item) => item.name === selectValue)[0]?.id,
+                Name: value,
+                Link: link
+              }}
               func={addProductSubtype}
               validate={validate}
             />

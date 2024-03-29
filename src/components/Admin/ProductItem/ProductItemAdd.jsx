@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductSubtypes } from "../../../app/productSubtypeSlice";
 import { addProductItem } from "../../../app/productItemsSlice";
 import AddButton from "../Common/Buttons/AddButton";
+import StringInput from "../Common/Inputs/StringInput";
 
 const ProductItemAdd = () => {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState();
   const [value, setValue] = useState("");
+  const [link, setLink] = useState("");
 
   useEffect(() => {
     dispatch(fetchProductSubtypes());
@@ -26,8 +28,13 @@ const ProductItemAdd = () => {
       return false
     }
 
-    if (value.length === 0){
+    if (value.length === 0) {
       alert('Имя не может быть пустым.')
+      return false
+    }
+
+    if (link.length === 0) {
+      alert('Ссылка не может быть пустой.')
       return false
     }
 
@@ -43,7 +50,7 @@ const ProductItemAdd = () => {
           <input
             id="file"
             type="file"
-            onChange={(e) => setFile(e.target.files[0])} 
+            onChange={(e) => setFile(e.target.files[0])}
           />
           {file && <img src={URL.createObjectURL(file)} alt="file" />}
           <label htmlFor="addItem">Название продукта:</label>
@@ -67,6 +74,11 @@ const ProductItemAdd = () => {
             autoComplete="off"
             onChange={(e) => setValue(e.target.value)}
           />
+          <StringInput
+            value={link}
+            labelValue={"Ссылка"}
+            setValue={setLink}
+          />
           <NavLink
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
@@ -74,9 +86,11 @@ const ProductItemAdd = () => {
             to={`/admin/productitem`}
           >
             <AddButton
-              data={{ProductSubTypeId: prodSubTypes.list.filter((item) => item.name === selectValue)[0]?.id,
+              data={{
+                ProductSubTypeId: prodSubTypes.list.filter((item) => item.name === selectValue)[0]?.id,
                 Name: value,
                 File: file,
+                Link: link
               }}
               func={addProductItem}
               validate={validate}

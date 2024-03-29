@@ -16,8 +16,9 @@ const ItemAdd = () => {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState();
-  const [value, setValue] = useState("");
+  const [name, setName] = useState("");
   const [price, setPrice] = useState();
+  const [link, setLink] = useState();
   const [isFullPrice, setIsFullPrice] = useState();
 
   useEffect(() => {
@@ -34,13 +35,18 @@ const ItemAdd = () => {
       return false
     }
 
-    if (value.length === 0){
+    if (name.length === 0) {
       alert('Name cannot be empty')
       return false
     }
 
     if (price === undefined) {
       alert('Price cannot be empty')
+      return false
+    }
+
+    if (link.length === 0) {
+      alert('Link cannot be empty')
       return false
     }
 
@@ -55,7 +61,7 @@ const ItemAdd = () => {
           <FileInput
             labelValue={"Изображение"}
             setValue={setFile}
-            item={{file:file}}
+            item={{ file: file }}
             isUpdate={false}
           />
           <DropdownInput
@@ -64,9 +70,9 @@ const ItemAdd = () => {
             options={productItems.list}
           />
           <StringInput
-            value={value}
+            value={name}
             labelValue={"Название изделия"}
-            setValue={setValue}
+            setValue={setName}
           />
           <div className={styles.price}>
             <NumberInput
@@ -80,6 +86,11 @@ const ItemAdd = () => {
               setValue={setIsFullPrice}
             />
           </div>
+          <StringInput
+              value={link}
+              labelValue={"Ссылка"}
+              setValue={setLink}
+            />
           <NavLink
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
@@ -87,13 +98,16 @@ const ItemAdd = () => {
             to={`/admin/item`}
           >
             <AddButton
-              data={{ProductItemId: productItems.list.filter((item) => item.name === selectValue)[0]?.id,
-                Name: value,
+              data={{
+                ProductItemId: productItems.list.filter((item) => item.name === selectValue)[0]?.id,
+                Name: name,
                 Price: price,
                 File: file,
-                IsFullPrice: isFullPrice}}
+                IsFullPrice: isFullPrice,
+                Link: link
+              }}
               func={addItem}
-              validate={validate}                
+              validate={validate}
             />
           </NavLink>
         </form>

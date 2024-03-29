@@ -21,6 +21,7 @@ const Item = () => {
   const [_name, setName] = useState("");
   const [_price, setPrice] = useState(0);
   const [_isFullPrice, setIsFullPrice] = useState();
+  const [_link, setLink] = useState();
 
   useEffect(() => {
     dispatch(fetchProductItems());
@@ -32,12 +33,10 @@ const Item = () => {
   const productItems = useSelector(({ productitems }) => productitems);
   const items = useSelector(({ items }) => items);
 
-  console.log(items)
-
   const groups = items.list.reduce(
-    (item, { id, productItemId, name, price, isFullPrice }) => {
+    (item, { id, productItemId, name, price, isFullPrice, link }) => {
       if (!item[productItemId]) item[productItemId] = [];
-      item[productItemId].push({ id, productItemId, name, price, isFullPrice });
+      item[productItemId].push({ id, productItemId, name, price, isFullPrice, link });
       return item;
     },
     {}
@@ -69,7 +68,7 @@ const Item = () => {
                   </h3>
                   {group[1].map(
                     (
-                      { id, productItemId, name, price, isFullPrice },
+                      { id, productItemId, name, price, isFullPrice, link },
                       index
                     ) => (
                       <Accordion.Item key={id} eventKey={id}>
@@ -109,6 +108,12 @@ const Item = () => {
                                 setValue={setIsFullPrice}
                               />
                             </div>
+                            <StringInput
+                              id={id}
+                              value={link}
+                              labelValue={"Ссылка"}
+                              setValue={setLink}
+                            />
                             <section>
                               <UpdateButton
                                 data={{
@@ -125,6 +130,7 @@ const Item = () => {
                                       ? isFullPrice
                                       : _isFullPrice,
                                   File: _file,
+                                  Link: _link || link
                                 }}
                                 func={updateItem}
                                 setFile={setFile}
