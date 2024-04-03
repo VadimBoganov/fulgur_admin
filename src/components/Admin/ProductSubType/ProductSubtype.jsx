@@ -81,7 +81,7 @@ const ProductSubtype = () => {
                           e.preventDefault();
                           const prodType =
                             selectValue === null || selectValue === undefined
-                              ? prodTypes.list[0]
+                              ? prodTypes.list.filter(item => item.id === productTypeId)[0]
                               : prodTypes.list.filter(
                                 (item) => item.name === selectValue
                               )[0];

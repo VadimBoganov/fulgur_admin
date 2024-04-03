@@ -11,6 +11,7 @@ import {
 } from "../../../app/productItemsSlice";
 import { Accordion } from "react-bootstrap";
 import StringInput from "../Common/Inputs/StringInput";
+import { fetchProductTypes } from "../../../app/productTypesSlice";
 
 const ProductItem = () => {
   const dispatch = useDispatch();
@@ -20,15 +21,18 @@ const ProductItem = () => {
   const [_link, setLink] = useState();
 
   const prodSubTypes = useSelector(({ productsubtypes }) => productsubtypes);
+  const productTypes = useSelector(({ producttypes }) => producttypes);
 
   useEffect(() => {
     dispatch(fetchProductSubtypes());
     dispatch(fetchProductItems());
+    dispatch(fetchProductTypes());
   }, [dispatch]);
 
   const { list } = useSelector(({ productitems }) => productitems);
 
   const [selectValue, setSelectValue] = useState();
+  const [selectType, setSelectType] = useState();
 
   return (
     <div className={styles.admin}>
@@ -44,7 +48,7 @@ const ProductItem = () => {
         </NavLink>
         <Accordion data-bs-theme="dark">
           {list &&
-            list.map(({ id, productSubTypeId, name, imageUrl, link }) => (
+            list.map(({ id, productTypeId, productSubTypeId, name, imageUrl, link }) => (
               <Accordion.Item key={id} eventKey={id}>
                 <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>
@@ -62,6 +66,20 @@ const ProductItem = () => {
                         <img src={URL.createObjectURL(file)} alt="file" />
                       </>
                     )}
+                    <label htmlFor="addType">Тип продукта:</label>
+                    <select
+                      id="addType"
+                      name="product items"
+                      defaultValue={productTypes.list.filter(item => item.id === productTypeId)[0]?.name}
+                      onChange={(e) => setSelectType(e.target.value)}
+                    >
+                      {productTypes.list &&
+                        productTypes.list.map(({ id, name }) => (
+                          <option key={id} value={name}>
+                            {name}
+                          </option>
+                        ))}
+                    </select>
                     <label htmlFor="addItem">Название продукта:</label>
                     <select
                       id="addItem"
@@ -70,7 +88,7 @@ const ProductItem = () => {
                       onChange={(e) => setSelectValue(e.target.value)}
                     >
                       {prodSubTypes.list &&
-                        prodSubTypes.list.map(({ id, name }) => (
+                        prodSubTypes.list.filter(st => st.productTypeId === productTypes.list.filter(pt => pt.name === selectType)[0]?.id).map(({ id, name }) => (
                           <option key={id} value={name}>
                             {name}
                           </option>
@@ -95,15 +113,18 @@ const ProductItem = () => {
                         className={styles.button}
                         onClick={(e) => {
                           e.preventDefault();
+                          const productType = selectType === null || selectType === undefined ? productTypes.list.filter(item => item.id === productTypeId)[0]
+                           : productTypes.list.filter((item) => item.name === selectType)[0];
                           const prodSubType =
                             selectValue === null || selectValue === undefined
-                              ? prodSubTypes.list[0]
+                              ? prodSubTypes.list.filter(item => item.id === productSubTypeId)[0]
                               : prodSubTypes.list.filter(
                                 (item) => item.name === selectValue
                               )[0];
                           dispatch(
                             updateProductItem({
                               Id: id,
+                              ProductTypeId: productType.id,
                               ProductSubTypeId: prodSubType.id,
                               Name: _name || name,
                               File: file,
