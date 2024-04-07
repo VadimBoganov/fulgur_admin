@@ -124,8 +124,8 @@ const ProductItem = () => {
                           dispatch(
                             updateProductItem({
                               Id: id,
-                              ProductTypeId: productType.id,
-                              ProductSubTypeId: prodSubType.id,
+                              ProductTypeId: productType?.id,
+                              ProductSubTypeId: prodSubType?.id || null,
                               Name: _name || name,
                               File: file,
                               Link: _link || link,
