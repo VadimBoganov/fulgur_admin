@@ -33,8 +33,6 @@ const Item = () => {
   const productItems = useSelector(({ productitems }) => productitems);
   const items = useSelector(({ items }) => items);
 
-  console.log(items)
-
   const groups = items.list.reduce(
     (item, { id, productItemId, name, price, imageUrl, isFullPrice, link }) => {
       if (!item[productItemId]) item[productItemId] = [];
@@ -44,8 +42,6 @@ const Item = () => {
     {}
   );
   
-  console.log(groups)
-
   return (
     <div className={styles.admin}>
       <Sidebar />

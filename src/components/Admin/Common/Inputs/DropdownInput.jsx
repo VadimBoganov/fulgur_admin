@@ -9,13 +9,13 @@ const DropdownInput = ({id, value, setValue, labelValue, options }) => {
     setValue: setValue,
     options: options
   });
-
+  
   return (
     <>
       <label htmlFor={hashValue}>{labelValue}:</label>
       <select
         id={hashValue}
-        defaultValue={options.filter((o) => o.id === value)[0]?.name}
+        value={options.filter((o) => o.id === value)[0]?.name}
         onChange={(e) => setValue(e.target.value)}
       >
         {options &&
