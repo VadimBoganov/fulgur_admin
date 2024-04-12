@@ -8,7 +8,7 @@ const FileInput = ({ item, setValue, labelValue, isUpdate }) => {
     setValue: setValue,
     isUpdate: isUpdate
   });
-
+  
   return (
     <>
       <label htmlFor={hashValue}>{labelValue}:</label>

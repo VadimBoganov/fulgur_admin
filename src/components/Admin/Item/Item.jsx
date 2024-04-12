@@ -33,15 +33,19 @@ const Item = () => {
   const productItems = useSelector(({ productitems }) => productitems);
   const items = useSelector(({ items }) => items);
 
+  console.log(items)
+
   const groups = items.list.reduce(
-    (item, { id, productItemId, name, price, isFullPrice, link }) => {
+    (item, { id, productItemId, name, price, imageUrl, isFullPrice, link }) => {
       if (!item[productItemId]) item[productItemId] = [];
-      item[productItemId].push({ id, productItemId, name, price, isFullPrice, link });
+      item[productItemId].push({ id, productItemId, name, price, imageUrl, isFullPrice, link });
       return item;
     },
     {}
   );
   
+  console.log(groups)
+
   return (
     <div className={styles.admin}>
       <Sidebar />
@@ -68,7 +72,7 @@ const Item = () => {
                   </h3>
                   {group[1].map(
                     (
-                      { id, productItemId, name, price, isFullPrice, link },
+                      { id, productItemId, name, price, imageUrl, isFullPrice, link },
                       index
                     ) => (
                       <Accordion.Item key={id} eventKey={id}>
@@ -76,7 +80,7 @@ const Item = () => {
                         <Accordion.Body>
                           <form key={id} className={styles.form}>
                             <FileInput
-                              item={{imageUrl: items.list[index].imageUrl, file: _file}}
+                              item={{imageUrl: imageUrl, file: _file}}
                               labelValue={"Изображение"}
                               setValue={setFile}
                               isUpdate={true}
