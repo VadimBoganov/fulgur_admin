@@ -9,23 +9,29 @@ import {
 } from "../../../app/productSubtypeSlice";
 import styles from "../Admin.module.scss";
 import { fetchProductTypes } from "../../../app/productTypesSlice";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Spinner } from "react-bootstrap";
 import StringInput from "../Common/Inputs/StringInput";
 
 const ProductSubtype = () => {
   const dispatch = useDispatch();
-  const prodTypes = useSelector(({ producttypes }) => producttypes);
   const [value, setValue] = useState("");
   const [_link, setLink] = useState()
+  const [selectValue, setSelectValue] = useState();
+
+  const prodTypes = useSelector(({ producttypes }) => producttypes);
+  const productSubtypes = useSelector(({ productsubtypes }) => productsubtypes);
+
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProductTypes());
-    dispatch(fetchProductSubtypes());
+    setReady(false);
+    Promise.all([
+      dispatch(fetchProductTypes()),
+      dispatch(fetchProductSubtypes()),
+    ]).then(() => setReady(true));
   }, [dispatch]);
 
-  const { list } = useSelector(({ productsubtypes }) => productsubtypes);
-
-  const [selectValue, setSelectValue] = useState();
+  const isLoading = !ready;
 
   return (
     <div className={styles.admin}>
@@ -39,9 +45,14 @@ const ProductSubtype = () => {
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>
+        {isLoading && (
+          <div className={styles.spinner_wrapper}>
+            <Spinner animation="border" variant="light" role="status" />
+          </div>
+        )}
         <Accordion data-bs-theme="dark">
-          {list &&
-            list.map(({ id, productTypeId, name, link }) => (
+          {!isLoading &&
+            productSubtypes.list.map(({ id, productTypeId, name, link }) => (
               <Accordion.Item key={id} eventKey={id}>
                 <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>
@@ -53,12 +64,11 @@ const ProductSubtype = () => {
                       defaultValue={prodTypes.list.filter(item => item.id === productTypeId)[0]?.name}
                       onChange={(e) => setSelectValue(e.target.value)}
                     >
-                      {prodTypes.list &&
-                        prodTypes.list.map(({ id, name }) => (
-                          <option key={id} value={name}>
-                            {name}
-                          </option>
-                        ))}
+                      {prodTypes.list.map(({ id, name }) => (
+                        <option key={id} value={name}>
+                          {name}
+                        </option>
+                      ))}
                     </select>
                     <label htmlFor={id}>Название:</label>
                     <input

@@ -8,7 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import Sidebar from "../Sidebar";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Spinner } from "react-bootstrap";
 import StringInput from "../Common/Inputs/StringInput";
 
 const Product = () => {
@@ -16,11 +16,16 @@ const Product = () => {
   const [value, setValue] = useState("");
   const [_link, setLink] = useState()
 
+  const products = useSelector(({ products }) => products);
+
+  const [ready, setReady] = useState(false);
+
   useEffect(() => {
-    dispatch(fetchProducts());
+    setReady(false);
+    dispatch(fetchProducts()).then(() => setReady(true));
   }, [dispatch]);
 
-  const { list } = useSelector(({ products }) => products);
+  const isLoading = !ready;
 
   return (
     <div className={styles.admin}>
@@ -34,9 +39,14 @@ const Product = () => {
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>
+        {isLoading && (
+          <div className={styles.spinner_wrapper}>
+            <Spinner animation="border" variant="light" role="status" />
+          </div>
+        )}
         <Accordion data-bs-theme="dark">
-          {list &&
-            list.map(({ id, name, link }) => (
+          {!isLoading &&
+            products.list.map(({ id, name, link }) => (
               <Accordion.Item key={id} eventKey={id}>
                 <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>

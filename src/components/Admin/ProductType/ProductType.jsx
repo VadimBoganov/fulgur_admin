@@ -9,23 +9,29 @@ import {
   updateProductType,
 } from "../../../app/productTypesSlice";
 import { fetchProducts } from "../../../app/productsSlice";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Spinner } from "react-bootstrap";
 import StringInput from "../Common/Inputs/StringInput";
 
 const ProductType = () => {
   const dispatch = useDispatch();
-  const prods = useSelector(({ products }) => products);
   const [value, setValue] = useState("");
   const [_link, setLink] = useState()
+  const [selectValue, setSelectValue] = useState();
+
+  const prods = useSelector(({ products }) => products);
+  const productTypes = useSelector(({ producttypes }) => producttypes);
+
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProducts());
-    dispatch(fetchProductTypes());
+    setReady(false);
+    Promise.all([
+      dispatch(fetchProducts()),
+      dispatch(fetchProductTypes()),
+    ]).then(() => setReady(true));
   }, [dispatch]);
 
-  const { list } = useSelector(({ producttypes }) => producttypes);
-  
-  const [selectValue, setSelectValue] = useState();
+  const isLoading = !ready;
 
   return (
     <div className={styles.admin}>
@@ -39,9 +45,14 @@ const ProductType = () => {
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>
+        {isLoading && (
+          <div className={styles.spinner_wrapper}>
+            <Spinner animation="border" variant="light" role="status" />
+          </div>
+        )}
         <Accordion data-bs-theme="dark">
-          {list &&
-            list.map(({ id, productId, name, link }) => (
+          {!isLoading &&
+            productTypes.list.map(({ id, productId, name, link }) => (
               <Accordion.Item key={id} eventKey={id}>
                 <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>
@@ -53,12 +64,11 @@ const ProductType = () => {
                       defaultValue={prods.list.filter(item => item.id === productId)[0]?.name}
                       onChange={(e) => setSelectValue(e.target.value)}
                     >
-                      {prods.list &&
-                        prods.list.map(({ id, name }) => (
-                          <option key={id} value={name}>
-                            {name}
-                          </option>
-                        ))}
+                      {prods.list.map(({ id, name }) => (
+                        <option key={id} value={name}>
+                          {name}
+                        </option>
+                      ))}
                     </select>
                     <label htmlFor={id}>Название:</label>
                     <input

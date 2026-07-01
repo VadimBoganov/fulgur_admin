@@ -9,7 +9,7 @@ import {
   removeProductItem,
   updateProductItem,
 } from "../../../app/productItemsSlice";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Spinner } from "react-bootstrap";
 import StringInput from "../Common/Inputs/StringInput";
 import { fetchProductTypes } from "../../../app/productTypesSlice";
 
@@ -19,20 +19,25 @@ const ProductItem = () => {
   const [file, setFile] = useState("");
   const [_name, setName] = useState("");
   const [_link, setLink] = useState();
+  const [selectValue, setSelectValue] = useState();
+  const [selectType, setSelectType] = useState();
 
   const prodSubTypes = useSelector(({ productsubtypes }) => productsubtypes);
   const productTypes = useSelector(({ producttypes }) => producttypes);
+  const productItems = useSelector(({ productitems }) => productitems);
+
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProductSubtypes());
-    dispatch(fetchProductItems());
-    dispatch(fetchProductTypes());
+    setReady(false);
+    Promise.all([
+      dispatch(fetchProductSubtypes()),
+      dispatch(fetchProductTypes()),
+      dispatch(fetchProductItems()),
+    ]).then(() => setReady(true));
   }, [dispatch]);
 
-  const { list } = useSelector(({ productitems }) => productitems);
-
-  const [selectValue, setSelectValue] = useState();
-  const [selectType, setSelectType] = useState();
+  const isLoading = !ready;
 
   return (
     <div className={styles.admin}>
@@ -46,9 +51,14 @@ const ProductItem = () => {
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>
+        {isLoading && (
+          <div className={styles.spinner_wrapper}>
+            <Spinner animation="border" variant="light" role="status" />
+          </div>
+        )}
         <Accordion data-bs-theme="dark">
-          {list &&
-            list.map(({ id, productTypeId, productSubTypeId, name, imageUrl, link }) => (
+          {!isLoading &&
+            productItems.list.map(({ id, productTypeId, productSubTypeId, name, imageUrl, link }) => (
               <Accordion.Item key={id} eventKey={id}>
                 <Accordion.Header>{name}</Accordion.Header>
                 <Accordion.Body>
@@ -73,12 +83,11 @@ const ProductItem = () => {
                       defaultValue={productTypes.list.filter(item => item.id === productTypeId)[0]?.name}
                       onChange={(e) => setSelectType(e.target.value)}
                     >
-                      {productTypes.list &&
-                        productTypes.list.map(({ id, name }) => (
-                          <option key={id} value={name}>
-                            {name}
-                          </option>
-                        ))}
+                      {productTypes.list.map(({ id, name }) => (
+                        <option key={id} value={name}>
+                          {name}
+                        </option>
+                      ))}
                     </select>
                     <label htmlFor="addItem">Название продукта:</label>
                     <select
@@ -87,8 +96,9 @@ const ProductItem = () => {
                       defaultValue={prodSubTypes.list.filter(item => item.id === productSubTypeId)[0]?.name}
                       onChange={(e) => setSelectValue(e.target.value)}
                     >
-                      {prodSubTypes.list &&
-                        prodSubTypes.list.filter(st => st.productTypeId === productTypes.list.filter(pt => pt.name === selectType)[0]?.id).map(({ id, name }) => (
+                      {prodSubTypes.list
+                        .filter(st => st.productTypeId === productTypes.list.filter(pt => pt.name === selectType)[0]?.id)
+                        .map(({ id, name }) => (
                           <option key={id} value={name}>
                             {name}
                           </option>
@@ -146,9 +156,7 @@ const ProductItem = () => {
                       >
                         Удалить
                       </button>
-
                     </section>
-
                   </form>
                 </Accordion.Body>
               </Accordion.Item>

@@ -52,10 +52,18 @@ const itemsSlice = createSlice({
     name:'itemsSlice',
     initialState: {
         list: [],
+        status: 'idle',
     },
     extraReducers: (builder) => {
+        builder.addCase(fetchItems.pending, (state) => {
+            state.status = 'loading';
+        })
         builder.addCase(fetchItems.fulfilled, (state, {payload}) => {
-            state.list = payload; 
+            state.list = payload;
+            state.status = 'succeeded';
+        })
+        builder.addCase(fetchItems.rejected, (state) => {
+            state.status = 'failed';
         })
         builder.addCase(removeItem.fulfilled, (state, {payload}) => {
             state.list = state.list.filter((item) => item.id !== payload.id)

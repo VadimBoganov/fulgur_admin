@@ -138,3 +138,38 @@ input[type=file] {
   font-size: 18px;
   font-weight: 700;
 }
+
+.spinner_wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search_bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  input {
+    margin: 0;
+    width: 280px;
+  }
+}
+
+.search_button {
+  @extend button;
+  background: #3a3a6e;
+  white-space: nowrap;
+  &:hover {
+    background: #4e4e96;
+  }
+}
+
+.search_info {
+  font-size: 13px;
+  color: var(--grey);
+  margin-bottom: 8px;
+}

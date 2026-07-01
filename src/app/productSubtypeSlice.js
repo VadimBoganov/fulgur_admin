@@ -52,10 +52,18 @@ const productSubtypesSlice = createSlice({
     name: 'productSubtypes',
     initialState: {
        list: [],
+       status: 'idle',
     },
     extraReducers: (builder) => {
+        builder.addCase(fetchProductSubtypes.pending, (state) => {
+            state.status = 'loading';
+        })
         builder.addCase(fetchProductSubtypes.fulfilled, (state, {payload}) => {
-            state.list = payload; 
+            state.list = payload;
+            state.status = 'succeeded';
+        })
+        builder.addCase(fetchProductSubtypes.rejected, (state) => {
+            state.status = 'failed';
         })
        
         builder.addCase(addProductSubtype.fulfilled, (state, {payload}) => {
