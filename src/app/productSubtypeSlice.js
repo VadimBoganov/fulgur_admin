@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios";
 import config from "../config/config.json"
 
-const url = `${config.protocol}${config.host}${config.port}/api/productsubtypes`
+const url = `${config.apiBaseUrl}/productsubtypes`
 let headers = {}
 
 export const fetchProductSubtypes = createAsyncThunk('fetchProductSubtypes', async (_, thunkApi) => {

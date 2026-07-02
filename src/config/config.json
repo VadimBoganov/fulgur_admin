@@ -1,8 +1,3 @@
 {
-    "protocol": "http://",
-    "host": "localhost:",
-    "port": "5227",
-    "productSubtypesUrl": "http://localhost:8000/api/productsubtypes",
-    "productItemsUrl":"http://localhost:8000/api/productitems",
-    "itemsUrl": "http://localhost:8000/api/items"
+    "apiBaseUrl": "/api"
 }

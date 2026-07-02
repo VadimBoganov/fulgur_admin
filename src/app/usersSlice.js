@@ -4,7 +4,7 @@ import config from "../config/config.json"
 
 export const fetchUsers = createAsyncThunk('fetchUsers', async(_, thunkApi) => {
     try{
-        const resp = await axios.get(config.baseUrl + "/api/user", {withCredentials:true})
+        const resp = await axios.get(config.apiBaseUrl + "/user", {withCredentials:true})
         if (resp.data.id > 0)
             return resp.data
         else {
