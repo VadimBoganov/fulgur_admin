@@ -95,7 +95,7 @@ const ItemAdd = () => {
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
             }
-            to={`/admin/item`}
+            to={`/item`}
           >
             <AddButton
               data={{

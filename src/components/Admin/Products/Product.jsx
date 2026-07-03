@@ -35,7 +35,7 @@ const Product = () => {
           className={({ isActive }) =>
             `${styles.link} ${isActive ? styles.active : ""}`
           }
-          to={`/admin/product/add`}
+          to={`/product/add`}
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>

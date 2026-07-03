@@ -63,7 +63,7 @@ const ProdutTypeForm = () => {
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
             }
-            to={`/admin/producttype`}
+            to={`/producttype`}
           >
             <AddButton
               data={{

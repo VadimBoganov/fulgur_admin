@@ -1,15 +1,15 @@
 export const ROUTES = {
     HOME: '/',
     CART: '/cart',
-    LOGIN:'/admin',
-    PRODUCT:'/admin/product',
-    PRODUCTADD:'/admin/product/add',
-    PRODUCTTYPE:'/admin/producttype',
-    PRODUCTTYPEADD:'/admin/producttype/add',
-    PRODUCTSUBTYPE:'/admin/productsubtype',
-    PRODUCTSUBTYPEADD:'/admin/productsubtype/add',
-    PRODUCTITEM:'/admin/productitem',
-    PRODUCTITEMADD:'/admin/productitem/add',
-    ITEM:'/admin/item',
-    ITEMADD: '/admin/item/add'
+    LOGIN:'/',
+    PRODUCT:'/product',
+    PRODUCTADD:'/product/add',
+    PRODUCTTYPE:'/producttype',
+    PRODUCTTYPEADD:'/producttype/add',
+    PRODUCTSUBTYPE:'/productsubtype',
+    PRODUCTSUBTYPEADD:'/productsubtype/add',
+    PRODUCTITEM:'/productitem',
+    PRODUCTITEMADD:'/productitem/add',
+    ITEM:'/item',
+    ITEMADD: '/item/add'
 }

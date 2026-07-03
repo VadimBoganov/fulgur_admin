@@ -22,7 +22,7 @@ const Login = () => {
             return ''
         }
             
-        navigate('/admin/product')
+        navigate('/product')
     }
 
     return (

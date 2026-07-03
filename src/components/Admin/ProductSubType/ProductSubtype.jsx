@@ -41,7 +41,7 @@ const ProductSubtype = () => {
           className={({ isActive }) =>
             `${styles.link} ${isActive ? styles.active : ""}`
           }
-          to={`/admin/productsubtype/add`}
+          to={`/productsubtype/add`}
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>

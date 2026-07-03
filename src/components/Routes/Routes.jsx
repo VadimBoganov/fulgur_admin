@@ -17,7 +17,6 @@ export const AppRoutes = () => {
   return (
     <Routes>
         <Route index element={<Login/>}/>
-        <Route path={ROUTES.LOGIN} element={<Login/>}/>
         <Route path={ROUTES.PRODUCT} element={<Product/>}/>
         <Route path={ROUTES.PRODUCTADD} element={<ProductAdd/>}/>
         <Route path={ROUTES.PRODUCTTYPE} element={<ProductType/>} />

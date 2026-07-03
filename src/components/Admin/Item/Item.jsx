@@ -120,7 +120,7 @@ const Item = () => {
           className={({ isActive }) =>
             `${styles.link} ${isActive ? styles.active : ""}`
           }
-          to={`/admin/item/add`}
+          to={`/item/add`}
         >
           <button className={styles.add_button}>Добавить</button>
         </NavLink>

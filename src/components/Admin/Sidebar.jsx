@@ -11,7 +11,7 @@ const Sidebar = () => {
     // so verify the session against the server instead.
     axios
       .get(`${config.apiBaseUrl}/auth/me`, { withCredentials: true })
-      .catch(() => { window.location.href = "/admin"; });
+      .catch(() => { window.location.href = "/"; });
   }, []);
 
   const logout = async (e) => {
@@ -19,7 +19,7 @@ const Sidebar = () => {
     try {
       await axios.post(`${config.apiBaseUrl}/auth/logout`, {}, { withCredentials: true });
     } finally {
-      window.location.href = "/admin";
+      window.location.href = "/";
     }
   }
 
@@ -33,7 +33,7 @@ const Sidebar = () => {
               className={({ isActive }) =>
                 `${styles.link} ${isActive ? styles.active : ""}`
               }
-              to={`/admin/product`}
+              to={`/product`}
             >
               Продукция
             </NavLink>
@@ -43,7 +43,7 @@ const Sidebar = () => {
               className={({ isActive }) =>
                 `${styles.link} ${isActive ? styles.active : ""}`
               }
-              to={`/admin/producttype`}
+              to={`/producttype`}
             >
               Типы продуктов
             </NavLink>
@@ -53,7 +53,7 @@ const Sidebar = () => {
               className={({ isActive }) =>
                 `${styles.link} ${isActive ? styles.active : ""}`
               }
-              to={`/admin/productsubtype`}
+              to={`/productsubtype`}
             >
               Подтипы продуктов
             </NavLink>
@@ -63,7 +63,7 @@ const Sidebar = () => {
               className={({ isActive }) =>
                 `${styles.link} ${isActive ? styles.active : ""}`
               }
-              to={`/admin/productitem`}
+              to={`/productitem`}
             >
               Продукты
             </NavLink>
@@ -73,7 +73,7 @@ const Sidebar = () => {
               className={({ isActive }) =>
                 `${styles.link} ${isActive ? styles.active : ""}`
               }
-              to={`/admin/item`}
+              to={`/item`}
             >
               Категории продуктов
             </NavLink>
@@ -84,7 +84,7 @@ const Sidebar = () => {
         <a className={styles.link} href="/">
           Помощь
         </a>
-        <a className={styles.link} style={{textDecoration: 'underline'}} onClick={logout} href="/admin">
+        <a className={styles.link} style={{textDecoration: 'underline'}} onClick={logout} href="/">
           Выйти
         </a>
       </div>

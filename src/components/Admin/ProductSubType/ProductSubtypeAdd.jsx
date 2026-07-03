@@ -64,7 +64,7 @@ const ProductSubtypeAdd = () => {
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
             }
-            to={`/admin/productsubtype`}
+            to={`/productsubtype`}
           >
             <AddButton
               data={{

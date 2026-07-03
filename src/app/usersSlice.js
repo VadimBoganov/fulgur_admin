@@ -8,12 +8,12 @@ export const fetchUsers = createAsyncThunk('fetchUsers', async(_, thunkApi) => {
         if (resp.data?.username)
             return resp.data
         else {
-            window.location.href="/admin";
+            window.location.href="/";
             return false;
         }
     }
     catch(err){
-        window.location.href="/admin";
+        window.location.href="/";
         return false;
     }
 })
