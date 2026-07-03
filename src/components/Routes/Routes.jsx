@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { ROUTES } from '../../utils/routes'
 
-import Home from '../Home/Home'
 import ProdutTypeAdd  from '../Admin/ProductType/ProdutTypeAdd'
 import ProductAdd from '../Admin/Products/ProductAdd'
 import Product from '../Admin/Products/Product'
@@ -17,7 +16,7 @@ import Login from '../Auth/Login'
 export const AppRoutes = () => {
   return (
     <Routes>
-        <Route index element = {<Home/>}/>
+        <Route index element={<Login/>}/>
         <Route path={ROUTES.LOGIN} element={<Login/>}/>
         <Route path={ROUTES.PRODUCT} element={<Product/>}/>
         <Route path={ROUTES.PRODUCTADD} element={<ProductAdd/>}/>
