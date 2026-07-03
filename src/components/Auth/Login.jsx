@@ -15,12 +15,10 @@ const Login = () => {
         e.preventDefault();
 
         try{
-            const resp = await axios.post(`${config.protocol}${config.host}${config.port}/api/auth`, {email: email, password: password}, {withCredentials: true})
-            const data = resp.data
-            sessionStorage.setItem("access_token", data.access_token)
+            await axios.post(`${config.apiBaseUrl}/auth`, {email: email, password: password}, {withCredentials: true})
         }
         catch(err){
-            setError(err.response.data)
+            setError(err?.response?.data || "Не удалось войти")
             return ''
         }
             

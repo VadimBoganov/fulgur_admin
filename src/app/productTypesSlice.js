@@ -7,9 +7,7 @@ let headers = {}
 
 export const fetchProductTypes = createAsyncThunk('fetchProductTypes', async (_, thunkApi) => {
     try{
-        const token = sessionStorage.getItem("access_token")
-        headers = {"Authorization": "Bearer " + token }
-        const resp = await axios(url, {headers: headers});
+        const resp = await axios(url, {headers: headers, withCredentials: true});
         return resp.data;
     }catch(err){
         console.log(err);
@@ -19,7 +17,7 @@ export const fetchProductTypes = createAsyncThunk('fetchProductTypes', async (_,
 
 export const addProductType = createAsyncThunk('addProductType', async(data, thunkApi) => {
     try{ 
-        const resp = await axios.post(url, data, {headers: headers});
+        const resp = await axios.post(url, data, {headers: headers, withCredentials: true});
         return resp.data;
     }catch(err){
         console.log(err);
@@ -29,7 +27,7 @@ export const addProductType = createAsyncThunk('addProductType', async(data, thu
 
 export const updateProductType = createAsyncThunk('updateProductType', async(data, thunkApi) => {
     try{ 
-        const resp = await axios.put(url, data, {headers: headers});
+        const resp = await axios.put(url, data, {headers: headers, withCredentials: true});
         return resp.data;
     }catch(err){
         console.log(err);
@@ -39,7 +37,7 @@ export const updateProductType = createAsyncThunk('updateProductType', async(dat
 
 export const removeProductType = createAsyncThunk('removeProductType', async(id, thunkApi) => {
     try{
-        const resp = await axios.delete(`${url}/${id}`, {headers: headers});
+        const resp = await axios.delete(`${url}/${id}`, {headers: headers, withCredentials: true});
         return resp.data
     }
     catch(err){

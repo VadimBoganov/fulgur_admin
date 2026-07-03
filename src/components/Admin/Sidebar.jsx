@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import config from "../../config/config.json";
 import styles from "./Sidebar.module.scss";
 
 const Sidebar = () => {
 
-  const token = sessionStorage.getItem("access_token")
-  if (token == null) window.location.href="/admin"
+  useEffect(() => {
+    // The auth token lives in an HttpOnly cookie and is not visible to JS,
+    // so verify the session against the server instead.
+    axios
+      .get(`${config.apiBaseUrl}/auth/me`, { withCredentials: true })
+      .catch(() => { window.location.href = "/admin"; });
+  }, []);
 
   const logout = async (e) => {
     e.preventDefault();
-    sessionStorage.clear();    
-    window.location.href="/admin";
+    try {
+      await axios.post(`${config.apiBaseUrl}/auth/logout`, {}, { withCredentials: true });
+    } finally {
+      window.location.href = "/admin";
+    }
   }
 
   return (
